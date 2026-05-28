@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LuziLeva — O comércio de Luziânia na sua porta</title>
+<meta name="description" content="Plataforma local de delivery que conecta clientes, lojistas e motoboys de Luziânia/GO. Faça pedidos pelo WhatsApp.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800;9..40,900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased}
+:root{
+  --g-deep:#0d2e0d;--g-rich:#1a4a1a;--g:#2d6a2d;--g-soft:#4a9e4a;--g-neon:#7ed957;
+  --y:#f5c518;--y-deep:#d4a814;
+  --o:#e55a1c;--b:#2563eb;--r:#dc2626;--p:#7c3aed;
+  --w:#fff;--bg:#0d2e0d;--bg-card:#fff;
+  --txt:#1a1a1a;--txt-soft:#5a6b5a;--line:rgba(13,46,13,0.1);
+}
+body{font-family:'DM Sans',sans-serif;color:var(--txt);background:var(--bg);line-height:1.55;font-weight:500;min-height:100vh;letter-spacing:-0.005em}
+.display{font-family:'DM Sans',sans-serif;font-weight:800;letter-spacing:-0.025em;line-height:1.05}
+
+/* Container vertical estilo splash app */
+.app{min-height:100vh;display:flex;flex-direction:column;background:linear-gradient(180deg,#0d2e0d 0%,#1a4a1a 100%);position:relative;overflow:hidden}
+.app::before{content:"";position:absolute;top:-100px;right:-100px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(245,197,24,0.15),transparent 70%);pointer-events:none}
+.app::after{content:"";position:absolute;bottom:-100px;left:-100px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(126,217,87,0.12),transparent 70%);pointer-events:none}
+
+/* Topo / Hero */
+.hero{padding:50px 24px 30px;text-align:center;position:relative;z-index:2}
+.moto{font-size:80px;margin-bottom:14px;filter:drop-shadow(0 8px 20px rgba(0,0,0,0.3));animation:bounce 2s ease-in-out infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.brand{font-family:'DM Sans',sans-serif;font-weight:900;font-size:clamp(48px,10vw,72px);color:#fff;letter-spacing:-0.04em;line-height:1}
+.brand .accent{color:var(--y)}
+.tagline{color:rgba(255,255,255,0.85);font-size:15px;font-weight:600;margin-top:10px;letter-spacing:-0.01em}
+.tagline .heart{color:var(--g-neon)}
+
+/* Cards de perfil */
+.profiles{padding:10px 20px 30px;display:flex;flex-direction:column;gap:14px;position:relative;z-index:2}
+.profile-card{background:#fff;border-radius:20px;padding:18px 20px;display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--txt);transition:transform .2s,box-shadow .2s;box-shadow:0 6px 20px rgba(0,0,0,0.15);position:relative;overflow:hidden}
+.profile-card:hover,.profile-card:active{transform:translateY(-3px);box-shadow:0 12px 30px rgba(0,0,0,0.25)}
+.profile-card .ico{flex-shrink:0;width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:28px}
+.profile-card .info{flex:1;min-width:0}
+.profile-card h3{font-family:'DM Sans',sans-serif;font-weight:800;font-size:18px;letter-spacing:-0.01em;line-height:1.1;margin-bottom:2px}
+.profile-card p{font-size:12px;color:var(--txt-soft);font-weight:600;line-height:1.3}
+.profile-card .arrow{flex-shrink:0;color:var(--txt-soft);font-size:20px;font-weight:800}
+
+/* Variações de cor pelos perfis */
+.profile-card.cliente .ico{background:linear-gradient(135deg,#dcfce7,#bbf7d0);color:var(--g)}
+.profile-card.cliente h3{color:var(--g-deep)}
+
+.profile-card.lojista{background:linear-gradient(135deg,#1e40af,#2563eb);color:#fff}
+.profile-card.lojista .ico{background:rgba(255,255,255,0.2);color:#fff}
+.profile-card.lojista h3{color:#fff}
+.profile-card.lojista p{color:rgba(255,255,255,0.85)}
+.profile-card.lojista .arrow{color:rgba(255,255,255,0.7)}
+
+.profile-card.motoboy{background:linear-gradient(135deg,#c2410c,var(--o));color:#fff}
+.profile-card.motoboy .ico{background:rgba(255,255,255,0.2);color:#fff}
+.profile-card.motoboy h3{color:#fff}
+.profile-card.motoboy p{color:rgba(255,255,255,0.85)}
+.profile-card.motoboy .arrow{color:rgba(255,255,255,0.7)}
+
+.profile-card.admin{background:linear-gradient(135deg,#581c87,var(--p));color:#fff}
+.profile-card.admin .ico{background:rgba(255,255,255,0.2);color:#fff}
+.profile-card.admin h3{color:#fff}
+.profile-card.admin p{color:rgba(255,255,255,0.85)}
+.profile-card.admin .arrow{color:rgba(255,255,255,0.7)}
+
+/* Rodapé com info */
+.foot{margin-top:auto;padding:20px 24px 28px;text-align:center;position:relative;z-index:2}
+.foot-row{display:flex;justify-content:center;gap:14px;margin-bottom:12px;flex-wrap:wrap}
+.foot-link{color:var(--y);text-decoration:none;font-weight:700;font-size:13px;letter-spacing:-0.01em}
+.foot-link:hover{text-decoration:underline}
+.foot p{color:rgba(255,255,255,0.6);font-size:11px;line-height:1.5;font-weight:600}
+.foot p strong{color:rgba(255,255,255,0.85)}
+
+/* Selo segurança topo */
+.security{background:rgba(0,0,0,0.3);color:rgba(255,255,255,0.85);text-align:center;padding:7px;font-size:11px;font-weight:700;letter-spacing:0.3px;border-bottom:1px solid rgba(255,255,255,0.05)}
+.security svg{width:13px;height:13px;vertical-align:-2px;margin-right:4px}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Selo de segurança no topo -->
+  <div class="security">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+    DADOS PROTEGIDOS PELA LGPD · LUZIÂNIA/GO
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="moto">🛵</div>
+    <h1 class="brand">Luzi<span class="accent">Leva</span></h1>
+    <p class="tagline">O comércio de Luziânia na sua porta <span class="heart">💚</span></p>
+  </section>
+
+  <!-- PERFIS -->
+  <section class="profiles">
+
+    <a href="cadastro-cliente.html" class="profile-card cliente">
+      <div class="ico">🛒</div>
+      <div class="info">
+        <h3>Sou Cliente</h3>
+        <p>Veja o cardápio e peça pelo WhatsApp</p>
+      </div>
+      <span class="arrow">›</span>
+    </a>
+
+    <a href="painel-lojista.html" class="profile-card lojista">
+      <div class="ico">🏪</div>
+      <div class="info">
+        <h3>Sou Lojista</h3>
+        <p>Acompanhe seus pedidos e vendas</p>
+      </div>
+      <span class="arrow">›</span>
+    </a>
+
+    <a href="https://wa.me/5561900000000?text=Ol%C3%A1!%20Sou%20motoboy%20e%20tenho%20interesse%20em%20fazer%20entregas%20pelo%20LuziLeva." class="profile-card motoboy" target="_blank">
+      <div class="ico">🛵</div>
+      <div class="info">
+        <h3>Sou Motoboy</h3>
+        <p>Entre em contato pelo WhatsApp</p>
+      </div>
+      <span class="arrow">›</span>
+    </a>
+
+    <a href="admin.html" class="profile-card admin">
+      <div class="ico">👑</div>
+      <div class="info">
+        <h3>Admin LuziLeva</h3>
+        <p>Painel da Comendadora Érica</p>
+      </div>
+      <span class="arrow">›</span>
+    </a>
+
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="foot">
+    <div class="foot-row">
+      <a href="sobre.html" class="foot-link">✨ Sobre nós</a>
+      <a href="cardapio.html" class="foot-link">📋 Cardápio</a>
+      <a href="Politica_Privacidade_LGPD_LuziLeva.docx" class="foot-link">🔒 LGPD</a>
+    </div>
+    <p>
+      <strong>CNO — Cibernacional Operations</strong><br>
+      CNPJ 49.817.654/0001-00 · Luziânia/GO<br>
+      © 2026 — Todos os direitos reservados
+    </p>
+  </footer>
+
+</div>
+
+</body>
+</html>
