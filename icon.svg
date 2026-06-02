@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="90" fill="#1a3d1f"/>
+  <rect x="11" y="11" width="490" height="490" rx="80" fill="none" stroke="#c8a84b" stroke-width="7"/>
+  <g transform="translate(256, 210) scale(-1,1)">
+    <ellipse cx="0" cy="78" rx="105" ry="12" fill="#000000" opacity="0.2"/>
+    <circle cx="-72" cy="55" r="34" fill="#222"/>
+    <circle cx="-72" cy="55" r="22" fill="#3d3d3d"/>
+    <circle cx="-72" cy="55" r="9" fill="#c8a84b"/>
+    <circle cx="72" cy="55" r="34" fill="#222"/>
+    <circle cx="72" cy="55" r="22" fill="#3d3d3d"/>
+    <circle cx="72" cy="55" r="9" fill="#c8a84b"/>
+    <path d="M -100 40 Q -100 14 -72 12 Q -44 14 -44 40 L -52 40 Q -52 22 -72 22 Q -92 22 -92 40 Z" fill="#d9a930"/>
+    <path d="M -95 38 Q -98 -8 -60 -16 L -20 -16 L -10 38 Z" fill="#f0c84e"/>
+    <path d="M -55 36 L 30 36 L 38 22 L -48 22 Z" fill="#d9a930"/>
+    <path d="M 38 -50 Q 60 -48 64 -10 L 66 36 L 40 36 L 30 -10 Q 28 -42 38 -50 Z" fill="#f0c84e"/>
+    <path d="M 44 -42 Q 54 -40 56 -10 L 57 20 L 48 20 L 44 -10 Z" fill="#fdd968" opacity="0.6"/>
+    <path d="M -62 -16 Q -64 -28 -48 -28 L -14 -28 Q -4 -28 -6 -16 Z" fill="#3a2a1a"/>
+    <ellipse cx="-34" cy="-23" rx="26" ry="5" fill="#4a3525"/>
+    <g transform="rotate(8 49 -58)"><rect x="44" y="-72" width="11" height="28" rx="4" fill="#bf9228"/></g>
+    <rect x="34" y="-78" width="40" height="11" rx="5" fill="#bf9228"/>
+    <line x1="70" y1="-76" x2="80" y2="-90" stroke="#999" stroke-width="4" stroke-linecap="round"/>
+    <ellipse cx="82" cy="-92" rx="8" ry="6" fill="#a8c8e0"/>
+    <ellipse cx="62" cy="-30" rx="9" ry="12" fill="#fff8e0"/>
+    <ellipse cx="62" cy="-30" rx="5" ry="8" fill="#ffe9a8"/>
+    <rect x="-96" y="-44" width="34" height="30" rx="6" fill="#1a3d1f"/>
+    <rect x="-93" y="-41" width="28" height="24" rx="4" fill="none" stroke="#c8a84b" stroke-width="2.5"/>
+    <circle cx="-79" cy="-29" r="3" fill="#c8a84b"/>
+  </g>
+  <text x="256" y="375" text-anchor="middle" font-family="Arial, sans-serif" font-weight="900" font-size="84" letter-spacing="-2">
+    <tspan fill="#ffffff">Luzi</tspan><tspan fill="#c8a84b">Leva</tspan>
+  </text>
+  <text x="256" y="422" text-anchor="middle" font-family="Arial, sans-serif" font-size="23" fill="#c8a84b" letter-spacing="3">LUZIÂNIA · GO</text>
+</svg>
