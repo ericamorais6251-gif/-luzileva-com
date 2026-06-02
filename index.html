@@ -1,12 +1,9 @@
-<!DOCTYPE html>
+      <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LuziLeva — O comércio de Luziânia na sua porta</title>
-<link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#1a3d1f">
-<link rel="apple-touch-icon" href="/icon-192.png">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -19,6 +16,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;m
 .field label{display:block;font-size:13px;font-weight:700;margin-bottom:5px}
 .field input,.field select{width:100%;border:1.5px solid #d5e0d5;border-radius:11px;padding:12px;font-size:15px;font-family:inherit;background:#fafdfa}
 .field input:focus,.field select:focus{outline:none;border-color:#2d6a2d}
+.help{font-size:12px;color:#8a9a8a;margin-top:4px}
 .loading{text-align:center;padding:30px;color:#5a6b5a;font-weight:600}
 .back{cursor:pointer;font-size:24px;font-weight:700;color:#fff;text-decoration:none}
 .topbar{padding:16px 18px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:10;box-shadow:0 2px 12px rgba(0,0,0,.15);color:#fff}
@@ -28,6 +26,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;m
 .wrap{padding:16px;max-width:600px;margin:0 auto}
 .box{background:#fff;border-radius:16px;padding:18px;margin-bottom:16px;box-shadow:0 3px 12px rgba(0,0,0,.07)}
 .foto-preview{width:100%;height:120px;object-fit:cover;border-radius:11px;margin-bottom:10px;display:none}
+
 #home{min-height:100vh;display:flex;flex-direction:column;background:linear-gradient(180deg,#0d2e0d,#1a4a1a);color:#fff}
 .security{background:rgba(0,0,0,.3);text-align:center;padding:8px;font-size:11px;font-weight:700;color:rgba(255,255,255,.85)}
 .hero{padding:42px 24px 22px;text-align:center}
@@ -50,12 +49,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;m
 .c-adm{background:linear-gradient(135deg,#581c87,#7c3aed);color:#fff}.c-adm .ico{background:rgba(255,255,255,.2)}
 .foot{margin-top:auto;padding:18px 24px 26px;text-align:center;font-size:11px;line-height:1.5;color:rgba(255,255,255,.6);font-weight:600}
 .foot strong{color:rgba(255,255,255,.85)}
+
 .t-cli{background:linear-gradient(135deg,#1a4a1a,#2d6a2d)}
 .banner h2{font-size:16px;font-weight:800;color:#1a4a1a;margin-bottom:4px}
 .banner p{font-size:13px;color:#5a6b5a;line-height:1.4}
 .cats{display:flex;gap:8px;overflow-x:auto;padding:4px 0 12px}
 .cat{flex-shrink:0;padding:9px 16px;border-radius:20px;background:#fff;border:1.5px solid #d5e0d5;font-size:13px;font-weight:700;color:#3a4a3a;cursor:pointer}
 .cat.on{background:#2d6a2d;color:#fff;border-color:#2d6a2d}
+.sec-title{font-size:15px;font-weight:800;color:#1a4a1a;margin:8px 0 12px}
 .loja{background:#fff;border-radius:16px;overflow:hidden;margin-bottom:14px;box-shadow:0 3px 12px rgba(0,0,0,.07)}
 .loja-foto{width:100%;height:150px;object-fit:cover;display:block}
 .loja-foto-vazia{width:100%;height:150px;background:linear-gradient(135deg,#dcfce7,#bbf7d0);display:flex;align-items:center;justify-content:center;font-size:48px}
@@ -70,11 +71,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;m
 .prod-check{width:24px;height:24px;border-radius:6px;border:2px solid #c5d5c5;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:14px;cursor:pointer}
 .prod-check.on{background:#2d6a2d;border-color:#2d6a2d}
 .vazio{text-align:center;padding:40px 20px;color:#8a9a8a}.vazio .em{font-size:40px;margin-bottom:10px}
+
 .t-loj{background:linear-gradient(135deg,#1e40af,#2563eb)}
+
 .t-adm{background:linear-gradient(135deg,#581c87,#7c3aed)}
 .box h2{font-size:16px;font-weight:800;margin-bottom:10px}
 .pwrap{position:relative}.pwrap input{padding-right:46px}
 .eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:20px;cursor:pointer;opacity:.6}
+.senha-box{background:#f0e8fa;border-radius:10px;padding:12px;font-size:13px;margin-top:8px}
 .loja-item{display:flex;align-items:center;gap:10px;padding:12px;background:#faf7fe;border-radius:12px;margin-bottom:8px}
 .loja-item img{width:48px;height:48px;border-radius:8px;object-fit:cover;flex-shrink:0}
 .loja-item .li{flex:1}.loja-item .ln{font-size:14px;font-weight:800}
@@ -84,7 +88,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;m
 .plan-row input{flex:1;border:1px solid #e0d5ed;border-radius:8px;padding:8px;font-size:12px;font-family:inherit}
 .plan-head{display:flex;gap:6px;margin-bottom:6px;font-size:11px;font-weight:800;color:#581c87}
 .plan-head div{flex:1}
-.btn-load{opacity:.6;pointer-events:none}
 </style>
 </head>
 <body>
@@ -131,7 +134,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;m
       <div style="margin-top:14px">
         <div class="field"><label>Seu WhatsApp</label><input id="cTel" placeholder="(61) 99999-9999" inputmode="tel"></div>
         <div class="field"><label>Seu e-mail</label><input id="cEmail" placeholder="seuemail@exemplo.com" inputmode="email"></div>
-        <button class="btn" id="btnEntrar" style="background:#2d6a2d" onclick="cadastrarCliente()">Entrar e ver o cardápio</button>
+        <button class="btn" style="background:#2d6a2d" onclick="cadastrarCliente()">Entrar e ver o cardápio</button>
       </div>
     </div>
     <div id="cli_cardapio" class="hidden">
@@ -202,793 +205,136 @@ const SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSI
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const SENHA_ADMIN="caneta1989#";
 const ZAP_CENTRAL="5561994416273";
+const LINK_PAGAMENTO="https://link.mercadopago.com.br/luzilevaentregas";
 
-function toast(m,cor){
-  const t=document.createElement('div');t.className='toast';t.textContent=m;
-  if(cor)t.style.background=cor;
-  document.body.appendChild(t);setTimeout(()=>t.remove(),3000);
-}
-function prevFoto(inId,imgId){
-  const f=document.getElementById(inId).files[0];
-  const img=document.getElementById(imgId);
-  if(f){img.src=URL.createObjectURL(f);img.style.display='block';}
-}
+function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2800);}
+function prevFoto(inId,imgId){const f=document.getElementById(inId).files[0];const img=document.getElementById(imgId);if(f){img.src=URL.createObjectURL(f);img.style.display='block';}}
+
 function abrir(tela){
   ['home','cliente','lojista','admin'].forEach(t=>document.getElementById(t).classList.add('hidden'));
-  document.getElementById(tela).classList.remove('hidden');
-  window.scrollTo(0,0);
+  document.getElementById(tela).classList.remove('hidden');window.scrollTo(0,0);
   if(tela==='cliente')initCliente();
   if(tela==='lojista')carregarLojaList();
   if(tela==='admin')initAdmin();
 }
 
 // ===== CLIENTE =====
-// CORREÇÃO: salva localmente sem depender do Supabase para cadastro
 let clienteAtual=JSON.parse(localStorage.getItem('luzileva_cliente')||'null');
 let catAtual='Todos';
-
-function initCliente(){
-  if(clienteAtual){
-    mostrarCardapio();
-  }
-}
-
+function initCliente(){if(clienteAtual)mostrarCardapio();}
 async function cadastrarCliente(){
-  const tel=document.getElementById('cTel').value.trim();
-  const email=document.getElementById('cEmail').value.trim();
-  if(!tel||!email){toast('Preencha telefone e e-mail ⚠️','#b45309');return;}
-
-  const btn=document.getElementById('btnEntrar');
-  btn.textContent='Entrando...';btn.classList.add('btn-load');
-
-  // Salva localmente primeiro — não trava se Supabase falhar
-  clienteAtual={telefone:tel,email:email};
-  localStorage.setItem('luzileva_cliente',JSON.stringify(clienteAtual));
-
-  // Tenta registrar no Supabase em segundo plano (sem bloquear)
-  try{
-    await sb.from('clientes').upsert(
-      {telefone:tel,email:email,nome:email},
-      {onConflict:'telefone',ignoreDuplicates:true}
-    );
-  }catch(e){
-    // Falha silenciosa — cliente já entrou localmente
-    console.warn('Supabase clientes:',e);
-  }
-
-  btn.textContent='Entrar e ver o cardápio';btn.classList.remove('btn-load');
-  mostrarCardapio();
-  toast('Pronto! Veja o cardápio 💚');
+  const tel=cTel.value.trim(),email=cEmail.value.trim();
+  if(!tel||!email){toast('Preencha telefone e e-mail');return;}
+  try{await sb.from('clientes').insert({telefone:tel,email:email,nome:email});
+    clienteAtual={telefone:tel,email};localStorage.setItem('luzileva_cliente',JSON.stringify(clienteAtual));
+    mostrarCardapio();toast('Pronto! Veja o cardápio 💚');
+  }catch(e){toast('Erro ao cadastrar');console.error(e);}
 }
-
 function mostrarCardapio(){
-  document.getElementById('cli_cadastro').classList.add('hidden');
-  document.getElementById('cli_cardapio').classList.remove('hidden');
+  cli_cadastro.classList.add('hidden');cli_cardapio.classList.remove('hidden');
   const cats=['Todos','Restaurante','Quitanda','Lanches','Farmácia'];
   document.getElementById('cats').innerHTML=cats.map(c=>`<div class="cat ${c===catAtual?'on':''}" onclick="filtrarCat('${c}')">${c}</div>`).join('');
   carregarLojas();
 }
-
 function filtrarCat(c){catAtual=c;mostrarCardapio();}
-
 async function carregarLojas(){
-  const area=document.getElementById('lojasArea');
-  area.innerHTML='<div class="loading">Carregando lojas...</div>';
-  try{
-    const {data:lojas,error}=await sb.from('lojistas').select('*').eq('ativo',true).order('nome');
-    if(error)throw error;
-    let lista=lojas||[];
-    if(catAtual!=='Todos')lista=lista.filter(l=>l.categoria===catAtual);
+  const area=lojasArea;area.innerHTML='<div class="loading">Carregando lojas...</div>';
+  try{let q=sb.from('lojistas').select('*').eq('ativo',true);
+    const {data:lojas,error}=await q.order('nome');if(error)throw error;
+    let lista=lojas||[];if(catAtual!=='Todos')lista=lista.filter(l=>l.categoria===catAtual);
     if(!lista.length){area.innerHTML='<div class="vazio"><div class="em">🏪</div>Nenhuma loja nesta categoria ainda.</div>';return;}
     area.innerHTML='';
-    for(const loja of lista){
-      const {data:prods}=await sb.from('produtos').select('*').eq('lojista_id',loja.id).order('nome');
-      area.appendChild(montarLoja(loja,prods||[]));
-    }
-  }catch(e){
-    area.innerHTML='<div class="vazio"><div class="em">⚠️</div>Erro ao carregar lojas. Verifique sua internet.</div>';
-    console.error(e);
-  }
+    for(const loja of lista){const {data:prods}=await sb.from('produtos').select('*').eq('lojista_id',loja.id).order('nome');area.appendChild(montarLoja(loja,prods||[]));}
+  }catch(e){area.innerHTML='<div class="vazio">Erro ao carregar.</div>';console.error(e);}
 }
-
 function montarLoja(loja,prods){
   const div=document.createElement('div');div.className='loja';
-  const foto=loja.foto_loja?`<img src="${loja.foto_loja}" class="loja-foto" loading="lazy">`:`<div class="loja-foto-vazia">🏪</div>`;
+  const foto=loja.foto_loja?`<img src="${loja.foto_loja}" class="loja-foto">`:`<div class="loja-foto-vazia">🏪</div>`;
   let ph='';
-  if(!prods.length){
-    ph='<p style="font-size:13px;color:#8a9a8a;margin-top:10px">Sem produtos cadastrados ainda.</p>';
-  }else{
-    ph='<div class="produtos">';
-    prods.slice(0,5).forEach(p=>{
-      const pf=p.foto?`<img src="${p.foto}" loading="lazy">`:`<div style="width:48px;height:48px;border-radius:8px;background:#dcfce7;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">🛍️</div>`;
-      const nomeEsc=p.nome.replace(/"/g,'&quot;');
-      ph+=`<div class="prod">${pf}<div class="pinfo"><div class="pnome">${p.nome}</div><div class="ppreco">R$ ${Number(p.preco).toFixed(2).replace('.',',')}</div></div><div class="prod-check" data-nome="${nomeEsc}" data-preco="${p.preco}" onclick="toggleCheck(this)"></div></div>`;
-    });
+  if(!prods.length){ph='<p style="font-size:13px;color:#8a9a8a;margin-top:10px">Sem produtos ainda.</p>';}
+  else{ph='<div class="produtos">';
+    prods.slice(0,5).forEach(p=>{const pf=p.foto?`<img src="${p.foto}">`:`<div style="width:48px;height:48px;border-radius:8px;background:#dcfce7;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">🛍️</div>`;
+      ph+=`<div class="prod">${pf}<div class="pinfo"><div class="pnome">${p.nome}</div><div class="ppreco">R$ ${Number(p.preco).toFixed(2).replace('.',',')}</div></div><div class="prod-check" data-nome="${p.nome}" data-preco="${p.preco}" onclick="this.classList.toggle('on');this.textContent=this.classList.contains('on')?'✓':''"></div></div>`;});
     ph+='</div>';
-    const nomeLojaEsc=loja.nome.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
-    ph+=`<button class="btn" style="background:#2d6a2d;margin-top:12px" onclick="fazerPedido(event,'${nomeLojaEsc}')">🛵 Pedir pelo WhatsApp</button>`;
+    ph+=`<button class="btn" style="background:#2d6a2d;margin-top:12px" onclick="fazerPedido(event,'${loja.nome.replace(/'/g,"")}','${loja.telefone||''}')">Pedir pelo WhatsApp</button>`;
   }
   div.innerHTML=`${foto}<div class="loja-body"><h3>${loja.nome}</h3><span class="loja-cat">${loja.categoria||''}</span><div class="loja-end">📍 ${loja.endereco||'Luziânia/GO'}</div>${ph}</div>`;
   return div;
 }
-
-function toggleCheck(el){
-  el.classList.toggle('on');
-  el.textContent=el.classList.contains('on')?'✓':'';
-}
-
-function fazerPedido(ev,lojaNome){
+function fazerPedido(ev,lojaNome,lojaTel){
   const lojaDiv=ev.target.closest('.loja');
   const marcados=lojaDiv.querySelectorAll('.prod-check.on');
-  if(!marcados.length){toast('Selecione pelo menos 1 produto ⚠️','#b45309');return;}
+  if(!marcados.length){toast('Selecione pelo menos 1 produto');return;}
   let total=0;
-  let texto=`*Pedido LuziLeva* 🛵%0A%0A*Loja:* ${encodeURIComponent(lojaNome)}%0A*Cliente:* ${encodeURIComponent(clienteAtual.telefone)}%0A%0A*Itens:*%0A`;
-  marcados.forEach(m=>{
-    const nome=m.dataset.nome,preco=Number(m.dataset.preco);
-    total+=preco;
-    texto+=`• ${encodeURIComponent(nome)} — R$ ${preco.toFixed(2).replace('.',',')}%0A`;
-  });
+  let texto=`*Pedido LuziLeva* 🛵%0A%0A*Loja:* ${lojaNome}%0A*Cliente (tel):* ${clienteAtual.telefone}%0A%0A*Itens:*%0A`;
+  marcados.forEach(m=>{const nome=m.dataset.nome,preco=Number(m.dataset.preco);total+=preco;texto+=`• ${nome} — R$ ${preco.toFixed(2).replace('.',',')}%0A`;});
   texto+=`%0A*Total: R$ ${total.toFixed(2).replace('.',',')}*%0A%0AVou enviar minha localização e o pagamento.`;
   window.open(`https://wa.me/${ZAP_CENTRAL}?text=${texto}`,'_blank');
-  toast('Abrindo WhatsApp... 💬');
+  toast('Abrindo WhatsApp...');
 }
 
-// ===== LOJISTA =====
+// ===== LOJISTA (vê todas as lojas, sem senha) =====
 async function carregarLojaList(){
-  const area=document.getElementById('lojListArea');
-  area.innerHTML='<div class="loading">Carregando...</div>';
-  try{
-    const {data:lojas,error}=await sb.from('lojistas').select('*').eq('ativo',true).order('categoria');
-    if(error)throw error;
+  const area=document.getElementById('lojListArea');area.innerHTML='<div class="loading">Carregando...</div>';
+  try{const {data:lojas,error}=await sb.from('lojistas').select('*').eq('ativo',true).order('categoria');if(error)throw error;
     if(!lojas||!lojas.length){area.innerHTML='<div class="vazio"><div class="em">🏪</div>Nenhuma loja cadastrada ainda.</div>';return;}
     area.innerHTML='';
-    for(const loja of lojas){
-      const {data:prods}=await sb.from('produtos').select('*').eq('lojista_id',loja.id).order('nome');
-      area.appendChild(montarLoja(loja,prods||[]));
-    }
-  }catch(e){
-    area.innerHTML='<div class="vazio"><div class="em">⚠️</div>Erro ao carregar.</div>';
-    console.error(e);
-  }
+    for(const loja of lojas){const {data:prods}=await sb.from('produtos').select('*').eq('lojista_id',loja.id).order('nome');area.appendChild(montarLoja(loja,prods||[]));}
+  }catch(e){area.innerHTML='<div class="vazio">Erro ao carregar.</div>';console.error(e);}
 }
 
 // ===== ADMIN =====
 function initAdmin(){if(sessionStorage.getItem('luzileva_admin')==='ok')abrirPainelAdmin();}
-function toggleEye(){const i=document.getElementById('admSenha');i.type=i.type==='password'?'text':'password';}
-function entrarAdmin(){
-  if(document.getElementById('admSenha').value===SENHA_ADMIN){
-    sessionStorage.setItem('luzileva_admin','ok');
-    abrirPainelAdmin();
-  }else toast('Senha incorreta ❌','#dc2626');
-}
-function sairAdmin(){
-  sessionStorage.removeItem('luzileva_admin');
-  document.getElementById('adm_painel').classList.add('hidden');
-  document.getElementById('adm_login').classList.remove('hidden');
-  document.getElementById('admLogout').classList.add('hidden');
-  document.getElementById('admSenha').value='';
-}
-function abrirPainelAdmin(){
-  document.getElementById('adm_login').classList.add('hidden');
-  document.getElementById('adm_painel').classList.remove('hidden');
-  document.getElementById('admLogout').classList.remove('hidden');
-  carregarLojistas();carregarPlan();
-}
-
+function toggleEye(){const i=admSenha;i.type=i.type==='password'?'text':'password';}
+function entrarAdmin(){if(admSenha.value===SENHA_ADMIN){sessionStorage.setItem('luzileva_admin','ok');abrirPainelAdmin();}else toast('Senha incorreta');}
+function sairAdmin(){sessionStorage.removeItem('luzileva_admin');adm_painel.classList.add('hidden');adm_login.classList.remove('hidden');admLogout.classList.add('hidden');admSenha.value='';}
+function abrirPainelAdmin(){adm_login.classList.add('hidden');adm_painel.classList.remove('hidden');admLogout.classList.remove('hidden');carregarLojistas();carregarPlan();}
 async function addLojista(){
-  const nome=document.getElementById('loNome').value.trim();
-  const cat=document.getElementById('loCat').value;
-  const tel=document.getElementById('loTel').value.trim();
-  const email=document.getElementById('loEmail').value.trim();
-  const arq=document.getElementById('loFoto').files[0];
-  if(!nome){toast('Preencha o nome da loja ⚠️','#b45309');return;}
-  const btn=document.getElementById('addLojBtn');
-  btn.textContent='Salvando...';btn.classList.add('btn-load');
-  try{
-    let url=null;
-    if(arq){
-      const ext=arq.name.split('.').pop();
-      const cam=`loja_${Date.now()}.${ext}`;
-      const {error:up}=await sb.storage.from('fotos').upload(cam,arq);
-      if(up)throw up;
-      url=sb.storage.from('fotos').getPublicUrl(cam).data.publicUrl;
-    }
-    const {error}=await sb.from('lojistas').insert({nome,categoria:cat,telefone:tel,email,senha:'-',foto_loja:url,ativo:true});
-    if(error)throw error;
-    document.getElementById('loNome').value='';
-    document.getElementById('loTel').value='';
-    document.getElementById('loEmail').value='';
-    document.getElementById('loFoto').value='';
-    document.getElementById('admFotoPrev').style.display='none';
-    toast('Loja cadastrada! 💜');
-    carregarLojistas();
-  }catch(e){toast('Erro ao cadastrar loja ❌','#dc2626');console.error(e);}
-  btn.textContent='Cadastrar loja';btn.classList.remove('btn-load');
+  const nome=loNome.value.trim(),cat=loCat.value,tel=loTel.value.trim(),email=loEmail.value.trim();const arq=loFoto.files[0];
+  if(!nome){toast('Preencha o nome da loja');return;}
+  addLojBtn.textContent='Salvando...';addLojBtn.disabled=true;
+  try{let url=null;
+    if(arq){const ext=arq.name.split('.').pop();const cam=`loja_${Date.now()}.${ext}`;const {error:up}=await sb.storage.from('fotos').upload(cam,arq);if(up)throw up;url=sb.storage.from('fotos').getPublicUrl(cam).data.publicUrl;}
+    const {error}=await sb.from('lojistas').insert({nome,categoria:cat,telefone:tel,email,senha:'-',foto_loja:url,ativo:true});if(error)throw error;
+    loNome.value='';loTel.value='';loEmail.value='';loFoto.value='';admFotoPrev.style.display='none';toast('Loja cadastrada! 💜');carregarLojistas();
+  }catch(e){toast('Erro ao cadastrar loja');console.error(e);}
+  addLojBtn.textContent='Cadastrar loja';addLojBtn.disabled=false;
 }
-
 async function addProduto(){
-  const lojaId=document.getElementById('prLoja').value;
-  const nome=document.getElementById('prNome').value.trim();
-  let preco=document.getElementById('prPreco').value.trim().replace(',','.');
-  const arq=document.getElementById('prFoto').files[0];
-  if(!lojaId){toast('Selecione uma loja ⚠️','#b45309');return;}
-  if(!nome||!preco){toast('Preencha nome e preço ⚠️','#b45309');return;}
-  preco=parseFloat(preco);
-  if(isNaN(preco)){toast('Preço inválido ❌','#dc2626');return;}
+  const lojaId=prLoja.value,nome=prNome.value.trim();let preco=prPreco.value.trim().replace(',','.');const arq=prFoto.files[0];
+  if(!lojaId){toast('Selecione uma loja');return;}
+  if(!nome||!preco){toast('Preencha nome e preço');return;}preco=parseFloat(preco);if(isNaN(preco)){toast('Preço inválido');return;}
   const {data:ex}=await sb.from('produtos').select('id').eq('lojista_id',lojaId);
-  if(ex&&ex.length>=5){toast('Máximo 5 produtos por loja ⚠️','#b45309');return;}
-  const btn=document.getElementById('addPrBtn');
-  btn.textContent='Salvando...';btn.classList.add('btn-load');
-  try{
-    let url=null;
-    if(arq){
-      const ext=arq.name.split('.').pop();
-      const cam=`${lojaId}/${Date.now()}.${ext}`;
-      const {error:up}=await sb.storage.from('fotos').upload(cam,arq);
-      if(up)throw up;
-      url=sb.storage.from('fotos').getPublicUrl(cam).data.publicUrl;
-    }
-    const {error}=await sb.from('produtos').insert({lojista_id:lojaId,nome,preco,foto:url});
-    if(error)throw error;
-    document.getElementById('prNome').value='';
-    document.getElementById('prPreco').value='';
-    document.getElementById('prFoto').value='';
-    document.getElementById('admProdPrev').style.display='none';
-    toast('Produto adicionado! 💜');
-  }catch(e){toast('Erro ao adicionar produto ❌','#dc2626');console.error(e);}
-  btn.textContent='Adicionar produto (máx. 5/loja)';btn.classList.remove('btn-load');
+  if(ex&&ex.length>=5){toast('Máximo 5 produtos por loja');return;}
+  addPrBtn.textContent='Salvando...';addPrBtn.disabled=true;
+  try{let url=null;
+    if(arq){const ext=arq.name.split('.').pop();const cam=`${lojaId}/${Date.now()}.${ext}`;const {error:up}=await sb.storage.from('fotos').upload(cam,arq);if(up)throw up;url=sb.storage.from('fotos').getPublicUrl(cam).data.publicUrl;}
+    const {error}=await sb.from('produtos').insert({lojista_id:lojaId,nome,preco,foto:url});if(error)throw error;
+    prNome.value='';prPreco.value='';prFoto.value='';admProdPrev.style.display='none';toast('Produto adicionado! 💜');
+  }catch(e){toast('Erro ao adicionar produto');console.error(e);}
+  addPrBtn.textContent='Adicionar produto (máx. 5/loja)';addPrBtn.disabled=false;
 }
-
 async function carregarLojistas(){
-  try{
-    const {data,error}=await sb.from('lojistas').select('*').order('criado_em',{ascending:false});
-    if(error)throw error;
-    const prLoja=document.getElementById('prLoja');
-    const listaLoj=document.getElementById('listaLoj');
+  try{const {data,error}=await sb.from('lojistas').select('*').order('criado_em',{ascending:false});if(error)throw error;
     prLoja.innerHTML=data.map(l=>`<option value="${l.id}">${l.nome} (${l.categoria||''})</option>`).join('');
     if(!data.length){listaLoj.innerHTML='<p style="font-size:13px;color:#8a7a9a">Nenhuma loja ainda.</p>';return;}
-    listaLoj.innerHTML='';
-    data.forEach(l=>{
-      const div=document.createElement('div');div.className='loja-item';
-      const f=l.foto_loja?`<img src="${l.foto_loja}" loading="lazy">`:`<div style="width:48px;height:48px;border-radius:8px;background:#ede0f5;display:flex;align-items:center;justify-content:center;font-size:22px">🏪</div>`;
-      const nomeEsc=l.nome.replace(/'/g,"\\'");
-      div.innerHTML=`${f}<div class="li"><div class="ln">${l.nome}</div><div class="le">${l.categoria||''} · ${l.telefone||''}</div></div><button class="del" onclick="delLojista('${l.id}','${nomeEsc}')">Excluir</button>`;
-      listaLoj.appendChild(div);
-    });
-  }catch(e){document.getElementById('listaLoj').innerHTML='<p>Erro ao carregar.</p>';console.error(e);}
+    listaLoj.innerHTML='';data.forEach(l=>{const div=document.createElement('div');div.className='loja-item';
+      const f=l.foto_loja?`<img src="${l.foto_loja}">`:`<div style="width:48px;height:48px;border-radius:8px;background:#ede0f5;display:flex;align-items:center;justify-content:center;font-size:22px">🏪</div>`;
+      div.innerHTML=`${f}<div class="li"><div class="ln">${l.nome}</div><div class="le">${l.categoria||''} · ${l.telefone||''}</div></div><button class="del" onclick="delLojista('${l.id}','${l.nome.replace(/'/g,"")}')">Excluir</button>`;listaLoj.appendChild(div);});
+  }catch(e){listaLoj.innerHTML='<p>Erro.</p>';console.error(e);}
 }
+async function delLojista(id,nome){if(!confirm('Excluir a loja "'+nome+'"?'))return;try{await sb.from('lojistas').delete().eq('id',id);toast('Excluída');carregarLojistas();}catch(e){toast('Erro');}}
 
-async function delLojista(id,nome){
-  if(!confirm('Excluir a loja "'+nome+'"?'))return;
-  try{
-    await sb.from('produtos').delete().eq('lojista_id',id);
-    await sb.from('lojistas').delete().eq('id',id);
-    toast('Loja excluída');carregarLojistas();
-  }catch(e){toast('Erro ao excluir','#dc2626');}
-}
-
-// Planilha manual
-function carregarPlan(){
-  const rows=JSON.parse(localStorage.getItem('luzileva_planilha')||'[]');
-  document.getElementById('planRows').innerHTML='';
-  if(!rows.length){addPlanRow();return;}
-  rows.forEach(r=>addPlanRow(r));
-}
-function addPlanRow(r){
-  r=r||{};
-  const div=document.createElement('div');div.className='plan-row';
+// Planilha manual (salva no aparelho)
+function carregarPlan(){const rows=JSON.parse(localStorage.getItem('luzileva_planilha')||'[]');document.getElementById('planRows').innerHTML='';if(!rows.length){addPlanRow();return;}rows.forEach(r=>addPlanRow(r));}
+function addPlanRow(r){r=r||{};const div=document.createElement('div');div.className='plan-row';
   div.innerHTML=`<input placeholder="data" value="${r.data||''}"><input placeholder="hora" value="${r.hora||''}"><input placeholder="R$" value="${r.valor||''}"><input placeholder="merc." value="${r.merc||''}"><input placeholder="motoboy" value="${r.moto||''}"><input placeholder="tel" value="${r.tel||''}">`;
-  document.getElementById('planRows').appendChild(div);
-}
-function salvarPlan(){
-  const rows=[];
-  document.querySelectorAll('#planRows .plan-row').forEach(r=>{
-    const i=r.querySelectorAll('input');
-    rows.push({data:i[0].value,hora:i[1].value,valor:i[2].value,merc:i[3].value,moto:i[4].value,tel:i[5].value});
-  });
-  localStorage.setItem('luzileva_planilha',JSON.stringify(rows));
-  toast('Planilha salva! 💾');
-}
+  document.getElementById('planRows').appendChild(div);}
+function salvarPlan(){const rows=[];document.querySelectorAll('#planRows .plan-row').forEach(r=>{const i=r.querySelectorAll('input');rows.push({data:i[0].value,hora:i[1].value,valor:i[2].value,merc:i[3].value,moto:i[4].value,tel:i[5].value});});localStorage.setItem('luzileva_planilha',JSON.stringify(rows));toast('Planilha salva! 💾');}
 </script>
 </body>
 </html>
 
-  <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LuziLeva — O comércio de Luziânia na sua porta</title>
-<link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#1a3d1f">
-<link rel="apple-touch-icon" href="/icon-192.png">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;min-height:100vh;background:#f3f6f3;color:#1a1a1a}
-.hidden{display:none!important}
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a4a1a;color:#fff;padding:13px 20px;border-radius:12px;font-weight:600;font-size:14px;box-shadow:0 4px 16px rgba(0,0,0,.25);z-index:200;max-width:90%;text-align:center}
-.btn{display:block;width:100%;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;color:#fff}
-.btn:active{filter:brightness(.9)}
-.field{margin-bottom:12px}
-.field label{display:block;font-size:13px;font-weight:700;margin-bottom:5px}
-.field input,.field select{width:100%;border:1.5px solid #d5e0d5;border-radius:11px;padding:12px;font-size:15px;font-family:inherit;background:#fafdfa}
-.field input:focus,.field select:focus{outline:none;border-color:#2d6a2d}
-.loading{text-align:center;padding:30px;color:#5a6b5a;font-weight:600}
-.back{cursor:pointer;font-size:24px;font-weight:700;color:#fff;text-decoration:none}
-.topbar{padding:16px 18px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:10;box-shadow:0 2px 12px rgba(0,0,0,.15);color:#fff}
-.topbar h1{font-size:19px;font-weight:800}
-.topbar .sub{font-size:12px;opacity:.85;font-weight:600}
-.logout{font-size:13px;color:#fff;opacity:.85;text-decoration:underline;margin-left:auto;cursor:pointer;font-weight:600}
-.wrap{padding:16px;max-width:600px;margin:0 auto}
-.box{background:#fff;border-radius:16px;padding:18px;margin-bottom:16px;box-shadow:0 3px 12px rgba(0,0,0,.07)}
-.foto-preview{width:100%;height:120px;object-fit:cover;border-radius:11px;margin-bottom:10px;display:none}
-#home{min-height:100vh;display:flex;flex-direction:column;background:linear-gradient(180deg,#0d2e0d,#1a4a1a);color:#fff}
-.security{background:rgba(0,0,0,.3);text-align:center;padding:8px;font-size:11px;font-weight:700;color:rgba(255,255,255,.85)}
-.hero{padding:42px 24px 22px;text-align:center}
-.moto{font-size:72px}
-.brand{font-weight:900;font-size:56px;letter-spacing:-.03em;line-height:1.1}
-.brand .y{color:#f5c518}
-.tagline{color:rgba(255,255,255,.85);font-size:15px;font-weight:600;margin-top:6px}
-.iglink{display:inline-flex;align-items:center;gap:6px;margin-top:10px;color:#fff;text-decoration:none;font-size:13px;font-weight:600;background:rgba(255,255,255,.12);padding:7px 14px;border-radius:20px}
-.profiles{padding:6px 20px 20px;display:flex;flex-direction:column;gap:12px}
-.card{border-radius:20px;padding:17px 20px;display:flex;align-items:center;gap:14px;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.18)}
-.card:active{transform:scale(.98)}
-.card .ico{width:50px;height:50px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:27px;background:rgba(0,0,0,.08);flex-shrink:0}
-.card .info{flex:1}
-.card h3{font-weight:800;font-size:18px}
-.card p{font-size:12px;font-weight:600;opacity:.75;margin-top:2px}
-.card .arrow{font-size:22px;font-weight:800;opacity:.6}
-.c-cli{background:#fff;color:#0d2e0d}.c-cli .ico{background:#dcfce7}
-.c-loj{background:linear-gradient(135deg,#1e40af,#2563eb);color:#fff}.c-loj .ico{background:rgba(255,255,255,.2)}
-.c-mot{background:linear-gradient(135deg,#c2410c,#e55a1c);color:#fff}.c-mot .ico{background:rgba(255,255,255,.2)}
-.c-adm{background:linear-gradient(135deg,#581c87,#7c3aed);color:#fff}.c-adm .ico{background:rgba(255,255,255,.2)}
-.foot{margin-top:auto;padding:18px 24px 26px;text-align:center;font-size:11px;line-height:1.5;color:rgba(255,255,255,.6);font-weight:600}
-.foot strong{color:rgba(255,255,255,.85)}
-.t-cli{background:linear-gradient(135deg,#1a4a1a,#2d6a2d)}
-.banner h2{font-size:16px;font-weight:800;color:#1a4a1a;margin-bottom:4px}
-.banner p{font-size:13px;color:#5a6b5a;line-height:1.4}
-.cats{display:flex;gap:8px;overflow-x:auto;padding:4px 0 12px}
-.cat{flex-shrink:0;padding:9px 16px;border-radius:20px;background:#fff;border:1.5px solid #d5e0d5;font-size:13px;font-weight:700;color:#3a4a3a;cursor:pointer}
-.cat.on{background:#2d6a2d;color:#fff;border-color:#2d6a2d}
-.loja{background:#fff;border-radius:16px;overflow:hidden;margin-bottom:14px;box-shadow:0 3px 12px rgba(0,0,0,.07)}
-.loja-foto{width:100%;height:150px;object-fit:cover;display:block}
-.loja-foto-vazia{width:100%;height:150px;background:linear-gradient(135deg,#dcfce7,#bbf7d0);display:flex;align-items:center;justify-content:center;font-size:48px}
-.loja-body{padding:14px}.loja-body h3{font-size:17px;font-weight:800}
-.loja-cat{display:inline-block;background:#dcfce7;color:#1a4a1a;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin-top:4px}
-.loja-end{font-size:13px;color:#5a6b5a;margin-top:6px}
-.produtos{margin-top:12px;display:flex;flex-direction:column;gap:8px}
-.prod{display:flex;align-items:center;gap:10px;padding:8px;background:#f7faf7;border-radius:10px}
-.prod img{width:48px;height:48px;border-radius:8px;object-fit:cover;flex-shrink:0}
-.prod .pinfo{flex:1}.prod .pnome{font-size:14px;font-weight:700}
-.prod .ppreco{font-size:14px;font-weight:800;color:#2d6a2d}
-.prod-check{width:24px;height:24px;border-radius:6px;border:2px solid #c5d5c5;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:14px;cursor:pointer}
-.prod-check.on{background:#2d6a2d;border-color:#2d6a2d}
-.vazio{text-align:center;padding:40px 20px;color:#8a9a8a}.vazio .em{font-size:40px;margin-bottom:10px}
-.t-loj{background:linear-gradient(135deg,#1e40af,#2563eb)}
-.t-adm{background:linear-gradient(135deg,#581c87,#7c3aed)}
-.box h2{font-size:16px;font-weight:800;margin-bottom:10px}
-.pwrap{position:relative}.pwrap input{padding-right:46px}
-.eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:20px;cursor:pointer;opacity:.6}
-.loja-item{display:flex;align-items:center;gap:10px;padding:12px;background:#faf7fe;border-radius:12px;margin-bottom:8px}
-.loja-item img{width:48px;height:48px;border-radius:8px;object-fit:cover;flex-shrink:0}
-.loja-item .li{flex:1}.loja-item .ln{font-size:14px;font-weight:800}
-.loja-item .le{font-size:12px;color:#7a6a8a}
-.del{background:#fee2e2;color:#dc2626;border:none;border-radius:8px;padding:8px 10px;font-weight:800;cursor:pointer;font-size:13px}
-.plan-row{display:flex;gap:6px;margin-bottom:6px}
-.plan-row input{flex:1;border:1px solid #e0d5ed;border-radius:8px;padding:8px;font-size:12px;font-family:inherit}
-.plan-head{display:flex;gap:6px;margin-bottom:6px;font-size:11px;font-weight:800;color:#581c87}
-.plan-head div{flex:1}
-.btn-load{opacity:.6;pointer-events:none}
-</style>
-</head>
-<body>
-
-<!-- HOME -->
-<div id="home">
-  <div class="security">🛡️ DADOS PROTEGIDOS PELA LGPD · LUZIÂNIA/GO</div>
-  <div class="hero">
-    <div class="moto">🛵</div>
-    <div class="brand">Luzi<span class="y">Leva</span></div>
-    <div class="tagline">O comércio de Luziânia na sua porta 💚</div>
-    <a class="iglink" href="https://www.instagram.com/erica_morais_cno" target="_blank">📸 @erica_morais_cno</a>
-  </div>
-  <div class="profiles">
-    <div class="card c-cli" onclick="abrir('cliente')">
-      <div class="ico">🛒</div><div class="info"><h3>Sou Cliente</h3><p>Veja o cardápio e peça pelo WhatsApp</p></div><span class="arrow">›</span>
-    </div>
-    <div class="card c-loj" onclick="abrir('lojista')">
-      <div class="ico">🏪</div><div class="info"><h3>Sou Lojista</h3><p>Veja as lojas cadastradas</p></div><span class="arrow">›</span>
-    </div>
-    <a class="card c-mot" href="https://wa.me/5561994416273?text=Ol%C3%A1!%20Sou%20motoboy%20e%20quero%20fazer%20entregas%20pelo%20LuziLeva." target="_blank" style="text-decoration:none">
-      <div class="ico">🛵</div><div class="info"><h3>Sou Motoboy</h3><p>Entre em contato pelo WhatsApp</p></div><span class="arrow">›</span>
-    </a>
-    <div class="card c-adm" onclick="abrir('admin')">
-      <div class="ico">👑</div><div class="info"><h3>Admin LuziLeva</h3><p>Painel da Comendadora Érica</p></div><span class="arrow">›</span>
-    </div>
-  </div>
-  <div class="foot">
-    <strong>CNO — Cibernacional Operations</strong><br>
-    CNPJ 49.817.654/0001-00 · Luziânia/GO<br>📱 (61) 99441-6273<br>© 2026 — Todos os direitos reservados
-  </div>
-</div>
-
-<!-- CLIENTE -->
-<div id="cliente" class="hidden">
-  <div class="topbar t-cli">
-    <span class="back" onclick="abrir('home')">‹</span>
-    <div><h1>🛒 Sou Cliente</h1><div class="sub">Lojas de Luziânia na sua porta</div></div>
-  </div>
-  <div class="wrap">
-    <div class="box banner" id="cli_cadastro">
-      <h2>👋 Bem-vindo!</h2>
-      <p>Cadastro rápido: só telefone e e-mail.</p>
-      <div style="margin-top:14px">
-        <div class="field"><label>Seu WhatsApp</label><input id="cTel" placeholder="(61) 99999-9999" inputmode="tel"></div>
-        <div class="field"><label>Seu e-mail</label><input id="cEmail" placeholder="seuemail@exemplo.com" inputmode="email"></div>
-        <button class="btn" id="btnEntrar" style="background:#2d6a2d" onclick="cadastrarCliente()">Entrar e ver o cardápio</button>
-      </div>
-    </div>
-    <div id="cli_cardapio" class="hidden">
-      <div class="cats" id="cats"></div>
-      <div id="lojasArea"></div>
-    </div>
-  </div>
-</div>
-
-<!-- LOJISTA -->
-<div id="lojista" class="hidden">
-  <div class="topbar t-loj">
-    <span class="back" onclick="abrir('home')">‹</span>
-    <div><h1>🏪 Lojas cadastradas</h1><div class="sub">Comércio de Luziânia</div></div>
-  </div>
-  <div class="wrap"><div id="lojListArea"><div class="loading">Carregando...</div></div></div>
-</div>
-
-<!-- ADMIN -->
-<div id="admin" class="hidden">
-  <div class="topbar t-adm">
-    <span class="back" onclick="abrir('home')">‹</span>
-    <div><h1>👑 Admin LuziLeva</h1><div class="sub">Painel da Comendadora Érica</div></div>
-    <span class="logout hidden" id="admLogout" onclick="sairAdmin()">Sair</span>
-  </div>
-  <div class="wrap">
-    <div class="box" id="adm_login">
-      <h2 style="color:#581c87">🔐 Acesso restrito</h2>
-      <p style="font-size:13px;color:#7a6a8a;margin-bottom:14px">Somente a administração da LuziLeva.</p>
-      <div class="field"><label>Senha de administrador</label>
-        <div class="pwrap"><input id="admSenha" type="password" placeholder="Digite sua senha"><span class="eye" onclick="toggleEye()">👁️</span></div>
-      </div>
-      <button class="btn" style="background:#7c3aed" onclick="entrarAdmin()">Entrar</button>
-    </div>
-    <div id="adm_painel" class="hidden">
-      <div class="box"><h2 style="color:#581c87">➕ Cadastrar loja</h2>
-        <img id="admFotoPrev" class="foto-preview">
-        <div class="field"><label>Foto da loja</label><input type="file" id="loFoto" accept="image/*" onchange="prevFoto('loFoto','admFotoPrev')"></div>
-        <div class="field"><label>Nome da loja</label><input id="loNome" placeholder="Ex.: Restaurante do Zé"></div>
-        <div class="field"><label>Categoria</label><select id="loCat"><option>Restaurante</option><option>Quitanda</option><option>Lanches</option><option>Farmácia</option></select></div>
-        <div class="field"><label>Telefone da loja</label><input id="loTel" placeholder="5561999999999" inputmode="tel"></div>
-        <div class="field"><label>E-mail da loja</label><input id="loEmail" placeholder="loja@exemplo.com"></div>
-        <button class="btn" style="background:#7c3aed" id="addLojBtn" onclick="addLojista()">Cadastrar loja</button>
-      </div>
-      <div class="box"><h2 style="color:#581c87">🛍️ Adicionar produto a uma loja</h2>
-        <img id="admProdPrev" class="foto-preview">
-        <div class="field"><label>Loja</label><select id="prLoja"></select></div>
-        <div class="field"><label>Foto do produto</label><input type="file" id="prFoto" accept="image/*" onchange="prevFoto('prFoto','admProdPrev')"></div>
-        <div class="field"><label>Nome do produto</label><input id="prNome" placeholder="Ex.: Marmita"></div>
-        <div class="field"><label>Preço (R$)</label><input id="prPreco" placeholder="Ex.: 18,00" inputmode="decimal"></div>
-        <button class="btn" style="background:#7c3aed" id="addPrBtn" onclick="addProduto()">Adicionar produto (máx. 5/loja)</button>
-      </div>
-      <div class="box"><h2 style="color:#581c87">📋 Planilha de controle (manual)</h2>
-        <p style="font-size:12px;color:#7a6a8a;margin-bottom:10px">Preencha à mão. Salva no seu aparelho.</p>
-        <div class="plan-head"><div>Data</div><div>Hora</div><div>Valor</div><div>Mercadoria</div><div>Motoboy</div><div>Tel</div></div>
-        <div id="planRows"></div>
-        <button class="btn" style="background:#581c87;margin-top:8px" onclick="addPlanRow()">+ Nova linha</button>
-        <button class="btn" style="background:#2d6a2d;margin-top:8px" onclick="salvarPlan()">💾 Salvar planilha</button>
-      </div>
-      <div class="box"><h2 style="color:#581c87">🏪 Lojas cadastradas</h2><div id="listaLoj"><div class="loading">Carregando...</div></div></div>
-    </div>
-  </div>
-</div>
-
-<script>
-const SUPABASE_URL="https://infnanfbgouxuklqdfta.supabase.co";
-const SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImluZm5hbmZiZ291eHVrbHFkZnRhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk5NjA0ODMsImV4cCI6MjA5NTUzNjQ4M30.RYFSSZeDgBo5BWFuJ7In7S83gN_YAf6t-TCQDH21Uu0";
-const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-const SENHA_ADMIN="caneta1989#";
-const ZAP_CENTRAL="5561994416273";
-
-function toast(m,cor){
-  const t=document.createElement('div');t.className='toast';t.textContent=m;
-  if(cor)t.style.background=cor;
-  document.body.appendChild(t);setTimeout(()=>t.remove(),3000);
-}
-function prevFoto(inId,imgId){
-  const f=document.getElementById(inId).files[0];
-  const img=document.getElementById(imgId);
-  if(f){img.src=URL.createObjectURL(f);img.style.display='block';}
-}
-function abrir(tela){
-  ['home','cliente','lojista','admin'].forEach(t=>document.getElementById(t).classList.add('hidden'));
-  document.getElementById(tela).classList.remove('hidden');
-  window.scrollTo(0,0);
-  if(tela==='cliente')initCliente();
-  if(tela==='lojista')carregarLojaList();
-  if(tela==='admin')initAdmin();
-}
-
-// ===== CLIENTE =====
-// CORREÇÃO: salva localmente sem depender do Supabase para cadastro
-let clienteAtual=JSON.parse(localStorage.getItem('luzileva_cliente')||'null');
-let catAtual='Todos';
-
-function initCliente(){
-  if(clienteAtual){
-    mostrarCardapio();
-  }
-}
-
-async function cadastrarCliente(){
-  const tel=document.getElementById('cTel').value.trim();
-  const email=document.getElementById('cEmail').value.trim();
-  if(!tel||!email){toast('Preencha telefone e e-mail ⚠️','#b45309');return;}
-
-  const btn=document.getElementById('btnEntrar');
-  btn.textContent='Entrando...';btn.classList.add('btn-load');
-
-  // Salva localmente primeiro — não trava se Supabase falhar
-  clienteAtual={telefone:tel,email:email};
-  localStorage.setItem('luzileva_cliente',JSON.stringify(clienteAtual));
-
-  // Tenta registrar no Supabase em segundo plano (sem bloquear)
-  try{
-    await sb.from('clientes').upsert(
-      {telefone:tel,email:email,nome:email},
-      {onConflict:'telefone',ignoreDuplicates:true}
-    );
-  }catch(e){
-    // Falha silenciosa — cliente já entrou localmente
-    console.warn('Supabase clientes:',e);
-  }
-
-  btn.textContent='Entrar e ver o cardápio';btn.classList.remove('btn-load');
-  mostrarCardapio();
-  toast('Pronto! Veja o cardápio 💚');
-}
-
-function mostrarCardapio(){
-  document.getElementById('cli_cadastro').classList.add('hidden');
-  document.getElementById('cli_cardapio').classList.remove('hidden');
-  const cats=['Todos','Restaurante','Quitanda','Lanches','Farmácia'];
-  document.getElementById('cats').innerHTML=cats.map(c=>`<div class="cat ${c===catAtual?'on':''}" onclick="filtrarCat('${c}')">${c}</div>`).join('');
-  carregarLojas();
-}
-
-function filtrarCat(c){catAtual=c;mostrarCardapio();}
-
-async function carregarLojas(){
-  const area=document.getElementById('lojasArea');
-  area.innerHTML='<div class="loading">Carregando lojas...</div>';
-  try{
-    const {data:lojas,error}=await sb.from('lojistas').select('*').eq('ativo',true).order('nome');
-    if(error)throw error;
-    let lista=lojas||[];
-    if(catAtual!=='Todos')lista=lista.filter(l=>l.categoria===catAtual);
-    if(!lista.length){area.innerHTML='<div class="vazio"><div class="em">🏪</div>Nenhuma loja nesta categoria ainda.</div>';return;}
-    area.innerHTML='';
-    for(const loja of lista){
-      const {data:prods}=await sb.from('produtos').select('*').eq('lojista_id',loja.id).order('nome');
-      area.appendChild(montarLoja(loja,prods||[]));
-    }
-  }catch(e){
-    area.innerHTML='<div class="vazio"><div class="em">⚠️</div>Erro ao carregar lojas. Verifique sua internet.</div>';
-    console.error(e);
-  }
-}
-
-function montarLoja(loja,prods){
-  const div=document.createElement('div');div.className='loja';
-  const foto=loja.foto_loja?`<img src="${loja.foto_loja}" class="loja-foto" loading="lazy">`:`<div class="loja-foto-vazia">🏪</div>`;
-  let ph='';
-  if(!prods.length){
-    ph='<p style="font-size:13px;color:#8a9a8a;margin-top:10px">Sem produtos cadastrados ainda.</p>';
-  }else{
-    ph='<div class="produtos">';
-    prods.slice(0,5).forEach(p=>{
-      const pf=p.foto?`<img src="${p.foto}" loading="lazy">`:`<div style="width:48px;height:48px;border-radius:8px;background:#dcfce7;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">🛍️</div>`;
-      const nomeEsc=p.nome.replace(/"/g,'&quot;');
-      ph+=`<div class="prod">${pf}<div class="pinfo"><div class="pnome">${p.nome}</div><div class="ppreco">R$ ${Number(p.preco).toFixed(2).replace('.',',')}</div></div><div class="prod-check" data-nome="${nomeEsc}" data-preco="${p.preco}" onclick="toggleCheck(this)"></div></div>`;
-    });
-    ph+='</div>';
-    const nomeLojaEsc=loja.nome.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
-    ph+=`<button class="btn" style="background:#2d6a2d;margin-top:12px" onclick="fazerPedido(event,'${nomeLojaEsc}')">🛵 Pedir pelo WhatsApp</button>`;
-  }
-  div.innerHTML=`${foto}<div class="loja-body"><h3>${loja.nome}</h3><span class="loja-cat">${loja.categoria||''}</span><div class="loja-end">📍 ${loja.endereco||'Luziânia/GO'}</div>${ph}</div>`;
-  return div;
-}
-
-function toggleCheck(el){
-  el.classList.toggle('on');
-  el.textContent=el.classList.contains('on')?'✓':'';
-}
-
-function fazerPedido(ev,lojaNome){
-  const lojaDiv=ev.target.closest('.loja');
-  const marcados=lojaDiv.querySelectorAll('.prod-check.on');
-  if(!marcados.length){toast('Selecione pelo menos 1 produto ⚠️','#b45309');return;}
-  let total=0;
-  let texto=`*Pedido LuziLeva* 🛵%0A%0A*Loja:* ${encodeURIComponent(lojaNome)}%0A*Cliente:* ${encodeURIComponent(clienteAtual.telefone)}%0A%0A*Itens:*%0A`;
-  marcados.forEach(m=>{
-    const nome=m.dataset.nome,preco=Number(m.dataset.preco);
-    total+=preco;
-    texto+=`• ${encodeURIComponent(nome)} — R$ ${preco.toFixed(2).replace('.',',')}%0A`;
-  });
-  texto+=`%0A*Total: R$ ${total.toFixed(2).replace('.',',')}*%0A%0AVou enviar minha localização e o pagamento.`;
-  window.open(`https://wa.me/${ZAP_CENTRAL}?text=${texto}`,'_blank');
-  toast('Abrindo WhatsApp... 💬');
-}
-
-// ===== LOJISTA =====
-async function carregarLojaList(){
-  const area=document.getElementById('lojListArea');
-  area.innerHTML='<div class="loading">Carregando...</div>';
-  try{
-    const {data:lojas,error}=await sb.from('lojistas').select('*').eq('ativo',true).order('categoria');
-    if(error)throw error;
-    if(!lojas||!lojas.length){area.innerHTML='<div class="vazio"><div class="em">🏪</div>Nenhuma loja cadastrada ainda.</div>';return;}
-    area.innerHTML='';
-    for(const loja of lojas){
-      const {data:prods}=await sb.from('produtos').select('*').eq('lojista_id',loja.id).order('nome');
-      area.appendChild(montarLoja(loja,prods||[]));
-    }
-  }catch(e){
-    area.innerHTML='<div class="vazio"><div class="em">⚠️</div>Erro ao carregar.</div>';
-    console.error(e);
-  }
-}
-
-// ===== ADMIN =====
-function initAdmin(){if(sessionStorage.getItem('luzileva_admin')==='ok')abrirPainelAdmin();}
-function toggleEye(){const i=document.getElementById('admSenha');i.type=i.type==='password'?'text':'password';}
-function entrarAdmin(){
-  if(document.getElementById('admSenha').value===SENHA_ADMIN){
-    sessionStorage.setItem('luzileva_admin','ok');
-    abrirPainelAdmin();
-  }else toast('Senha incorreta ❌','#dc2626');
-}
-function sairAdmin(){
-  sessionStorage.removeItem('luzileva_admin');
-  document.getElementById('adm_painel').classList.add('hidden');
-  document.getElementById('adm_login').classList.remove('hidden');
-  document.getElementById('admLogout').classList.add('hidden');
-  document.getElementById('admSenha').value='';
-}
-function abrirPainelAdmin(){
-  document.getElementById('adm_login').classList.add('hidden');
-  document.getElementById('adm_painel').classList.remove('hidden');
-  document.getElementById('admLogout').classList.remove('hidden');
-  carregarLojistas();carregarPlan();
-}
-
-async function addLojista(){
-  const nome=document.getElementById('loNome').value.trim();
-  const cat=document.getElementById('loCat').value;
-  const tel=document.getElementById('loTel').value.trim();
-  const email=document.getElementById('loEmail').value.trim();
-  const arq=document.getElementById('loFoto').files[0];
-  if(!nome){toast('Preencha o nome da loja ⚠️','#b45309');return;}
-  const btn=document.getElementById('addLojBtn');
-  btn.textContent='Salvando...';btn.classList.add('btn-load');
-  try{
-    let url=null;
-    if(arq){
-      const ext=arq.name.split('.').pop();
-      const cam=`loja_${Date.now()}.${ext}`;
-      const {error:up}=await sb.storage.from('fotos').upload(cam,arq);
-      if(up)throw up;
-      url=sb.storage.from('fotos').getPublicUrl(cam).data.publicUrl;
-    }
-    const {error}=await sb.from('lojistas').insert({nome,categoria:cat,telefone:tel,email,senha:'-',foto_loja:url,ativo:true});
-    if(error)throw error;
-    document.getElementById('loNome').value='';
-    document.getElementById('loTel').value='';
-    document.getElementById('loEmail').value='';
-    document.getElementById('loFoto').value='';
-    document.getElementById('admFotoPrev').style.display='none';
-    toast('Loja cadastrada! 💜');
-    carregarLojistas();
-  }catch(e){toast('Erro ao cadastrar loja ❌','#dc2626');console.error(e);}
-  btn.textContent='Cadastrar loja';btn.classList.remove('btn-load');
-}
-
-async function addProduto(){
-  const lojaId=document.getElementById('prLoja').value;
-  const nome=document.getElementById('prNome').value.trim();
-  let preco=document.getElementById('prPreco').value.trim().replace(',','.');
-  const arq=document.getElementById('prFoto').files[0];
-  if(!lojaId){toast('Selecione uma loja ⚠️','#b45309');return;}
-  if(!nome||!preco){toast('Preencha nome e preço ⚠️','#b45309');return;}
-  preco=parseFloat(preco);
-  if(isNaN(preco)){toast('Preço inválido ❌','#dc2626');return;}
-  const {data:ex}=await sb.from('produtos').select('id').eq('lojista_id',lojaId);
-  if(ex&&ex.length>=5){toast('Máximo 5 produtos por loja ⚠️','#b45309');return;}
-  const btn=document.getElementById('addPrBtn');
-  btn.textContent='Salvando...';btn.classList.add('btn-load');
-  try{
-    let url=null;
-    if(arq){
-      const ext=arq.name.split('.').pop();
-      const cam=`${lojaId}/${Date.now()}.${ext}`;
-      const {error:up}=await sb.storage.from('fotos').upload(cam,arq);
-      if(up)throw up;
-      url=sb.storage.from('fotos').getPublicUrl(cam).data.publicUrl;
-    }
-    const {error}=await sb.from('produtos').insert({lojista_id:lojaId,nome,preco,foto:url});
-    if(error)throw error;
-    document.getElementById('prNome').value='';
-    document.getElementById('prPreco').value='';
-    document.getElementById('prFoto').value='';
-    document.getElementById('admProdPrev').style.display='none';
-    toast('Produto adicionado! 💜');
-  }catch(e){toast('Erro ao adicionar produto ❌','#dc2626');console.error(e);}
-  btn.textContent='Adicionar produto (máx. 5/loja)';btn.classList.remove('btn-load');
-}
-
-async function carregarLojistas(){
-  try{
-    const {data,error}=await sb.from('lojistas').select('*').order('criado_em',{ascending:false});
-    if(error)throw error;
-    const prLoja=document.getElementById('prLoja');
-    const listaLoj=document.getElementById('listaLoj');
-    prLoja.innerHTML=data.map(l=>`<option value="${l.id}">${l.nome} (${l.categoria||''})</option>`).join('');
-    if(!data.length){listaLoj.innerHTML='<p style="font-size:13px;color:#8a7a9a">Nenhuma loja ainda.</p>';return;}
-    listaLoj.innerHTML='';
-    data.forEach(l=>{
-      const div=document.createElement('div');div.className='loja-item';
-      const f=l.foto_loja?`<img src="${l.foto_loja}" loading="lazy">`:`<div style="width:48px;height:48px;border-radius:8px;background:#ede0f5;display:flex;align-items:center;justify-content:center;font-size:22px">🏪</div>`;
-      const nomeEsc=l.nome.replace(/'/g,"\\'");
-      div.innerHTML=`${f}<div class="li"><div class="ln">${l.nome}</div><div class="le">${l.categoria||''} · ${l.telefone||''}</div></div><button class="del" onclick="delLojista('${l.id}','${nomeEsc}')">Excluir</button>`;
-      listaLoj.appendChild(div);
-    });
-  }catch(e){document.getElementById('listaLoj').innerHTML='<p>Erro ao carregar.</p>';console.error(e);}
-}
-
-async function delLojista(id,nome){
-  if(!confirm('Excluir a loja "'+nome+'"?'))return;
-  try{
-    await sb.from('produtos').delete().eq('lojista_id',id);
-    await sb.from('lojistas').delete().eq('id',id);
-    toast('Loja excluída');carregarLojistas();
-  }catch(e){toast('Erro ao excluir','#dc2626');}
-}
-
-// Planilha manual
-function carregarPlan(){
-  const rows=JSON.parse(localStorage.getItem('luzileva_planilha')||'[]');
-  document.getElementById('planRows').innerHTML='';
-  if(!rows.length){addPlanRow();return;}
-  rows.forEach(r=>addPlanRow(r));
-}
-function addPlanRow(r){
-  r=r||{};
-  const div=document.createElement('div');div.className='plan-row';
-  div.innerHTML=`<input placeholder="data" value="${r.data||''}"><input placeholder="hora" value="${r.hora||''}"><input placeholder="R$" value="${r.valor||''}"><input placeholder="merc." value="${r.merc||''}"><input placeholder="motoboy" value="${r.moto||''}"><input placeholder="tel" value="${r.tel||''}">`;
-  document.getElementById('planRows').appendChild(div);
-}
-function salvarPlan(){
-  const rows=[];
-  document.querySelectorAll('#planRows .plan-row').forEach(r=>{
-    const i=r.querySelectorAll('input');
-    rows.push({data:i[0].value,hora:i[1].value,valor:i[2].value,merc:i[3].value,moto:i[4].value,tel:i[5].value});
-  });
-  localStorage.setItem('luzileva_planilha',JSON.stringify(rows));
-  toast('Planilha salva! 💾');
-}
-</script>
-</body>
-</html>
-
-      
     
     
     
