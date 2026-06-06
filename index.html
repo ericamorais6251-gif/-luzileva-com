@@ -30,7 +30,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;m
 .wrap{padding:16px;max-width:600px;margin:0 auto}
 .box{background:#fff;border-radius:16px;padding:18px;margin-bottom:16px;box-shadow:0 3px 12px rgba(0,0,0,.07)}
 .foto-preview{width:100%;height:120px;object-fit:cover;border-radius:11px;margin-bottom:10px;display:none}
-
 #home{min-height:100vh;display:flex;flex-direction:column;background:linear-gradient(180deg,#0d2e0d,#1a4a1a);color:#fff}
 .security{background:rgba(0,0,0,.3);text-align:center;padding:8px;font-size:11px;font-weight:700;color:rgba(255,255,255,.85)}
 .hero{padding:42px 24px 22px;text-align:center}
@@ -53,7 +52,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;m
 .c-adm{background:linear-gradient(135deg,#581c87,#7c3aed);color:#fff}.c-adm .ico{background:rgba(255,255,255,.2)}
 .foot{margin-top:auto;padding:18px 24px 26px;text-align:center;font-size:11px;line-height:1.5;color:rgba(255,255,255,.6);font-weight:600}
 .foot strong{color:rgba(255,255,255,.85)}
-
 .t-cli{background:linear-gradient(135deg,#1a4a1a,#2d6a2d)}
 .banner h2{font-size:16px;font-weight:800;color:#1a4a1a;margin-bottom:4px}
 .banner p{font-size:13px;color:#5a6b5a;line-height:1.4}
@@ -75,9 +73,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;m
 .prod-check{width:24px;height:24px;border-radius:6px;border:2px solid #c5d5c5;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:14px;cursor:pointer}
 .prod-check.on{background:#2d6a2d;border-color:#2d6a2d}
 .vazio{text-align:center;padding:40px 20px;color:#8a9a8a}.vazio .em{font-size:40px;margin-bottom:10px}
-
 .t-loj{background:linear-gradient(135deg,#1e40af,#2563eb)}
-
 .t-adm{background:linear-gradient(135deg,#581c87,#7c3aed)}
 .box h2{font-size:16px;font-weight:800;margin-bottom:10px}
 .pwrap{position:relative}.pwrap input{padding-right:46px}
@@ -176,8 +172,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;m
     <div id="adm_painel" class="hidden">
       <div class="box"><h2 style="color:#581c87">➕ Cadastrar loja</h2>
         <img id="admFotoPrev" class="foto-preview">
-        <div class="field"><label>Foto da loja</label><input type="file" id="loFoto" accept="image/*" onchange="prevFoto('loFoto','admFotoPrev')"></div>
-        <div class="field"><label>Nome da loja</label><input id="loNome" placeholder="Ex.: Restaurante do Zé"></div>
+        <div class="field"><label>Foto da loja (opcional)</label><input type="file" id="loFoto" accept="image/*" onchange="prevFoto('loFoto','admFotoPrev')"></div>
+        <div class="field"><label>Nome da loja</label><input id="loNome" placeholder="Ex.: Drogaria Drogalima"></div>
         <div class="field"><label>Categoria</label><select id="loCat"><option>Restaurante</option><option>Quitanda</option><option>Lanches</option><option>Farmácia</option></select></div>
         <div class="field"><label>Telefone da loja</label><input id="loTel" placeholder="5561999999999" inputmode="tel"></div>
         <div class="field"><label>E-mail da loja</label><input id="loEmail" placeholder="loja@exemplo.com"></div>
@@ -186,9 +182,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;m
       <div class="box"><h2 style="color:#581c87">🛍️ Adicionar produto a uma loja</h2>
         <img id="admProdPrev" class="foto-preview">
         <div class="field"><label>Loja</label><select id="prLoja"></select></div>
-        <div class="field"><label>Foto do produto</label><input type="file" id="prFoto" accept="image/*" onchange="prevFoto('prFoto','admProdPrev')"></div>
-        <div class="field"><label>Nome do produto</label><input id="prNome" placeholder="Ex.: Marmita"></div>
-        <div class="field"><label>Preço (R$)</label><input id="prPreco" placeholder="Ex.: 18,00" inputmode="decimal"></div>
+        <div class="field"><label>Foto do produto (opcional)</label><input type="file" id="prFoto" accept="image/*" onchange="prevFoto('prFoto','admProdPrev')"></div>
+        <div class="field"><label>Nome do produto</label><input id="prNome" placeholder="Ex.: Dipirona"></div>
+        <div class="field"><label>Preço (R$)</label><input id="prPreco" placeholder="Ex.: 9,99" inputmode="decimal"></div>
         <button class="btn" style="background:#7c3aed" id="addPrBtn" onclick="addProduto()">Adicionar produto (máx. 5/loja)</button>
       </div>
       <div class="box"><h2 style="color:#581c87">📋 Planilha de controle (manual)</h2>
@@ -211,7 +207,7 @@ const SENHA_ADMIN="caneta1989#";
 const ZAP_CENTRAL="5561994416273";
 const LINK_PAGAMENTO="https://link.mercadopago.com.br/luzilevaentregas";
 
-function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2800);}
+function toast(m,cor){const t=document.createElement('div');t.className='toast';t.textContent=m;if(cor)t.style.background=cor;document.body.appendChild(t);setTimeout(()=>t.remove(),4500);}
 function prevFoto(inId,imgId){const f=document.getElementById(inId).files[0];const img=document.getElementById(imgId);if(f){img.src=URL.createObjectURL(f);img.style.display='block';}}
 
 function abrir(tela){
@@ -229,10 +225,9 @@ function initCliente(){if(clienteAtual)mostrarCardapio();}
 async function cadastrarCliente(){
   const tel=cTel.value.trim(),email=cEmail.value.trim();
   if(!tel||!email){toast('Preencha telefone e e-mail');return;}
-  try{await sb.from('clientes').insert({telefone:tel,email:email,nome:email});
-    clienteAtual={telefone:tel,email};localStorage.setItem('luzileva_cliente',JSON.stringify(clienteAtual));
-    mostrarCardapio();toast('Pronto! Veja o cardápio 💚');
-  }catch(e){toast('Erro ao cadastrar');console.error(e);}
+  clienteAtual={telefone:tel,email};localStorage.setItem('luzileva_cliente',JSON.stringify(clienteAtual));
+  try{await sb.from('clientes').upsert({telefone:tel,email:email,nome:email},{onConflict:'telefone',ignoreDuplicates:true});}catch(e){console.warn(e);}
+  mostrarCardapio();toast('Pronto! Veja o cardápio 💚');
 }
 function mostrarCardapio(){
   cli_cadastro.classList.add('hidden');cli_cardapio.classList.remove('hidden');
@@ -277,7 +272,7 @@ function fazerPedido(ev,lojaNome,lojaTel){
   toast('Abrindo WhatsApp...');
 }
 
-// ===== LOJISTA (vê todas as lojas, sem senha) =====
+// ===== LOJISTA =====
 async function carregarLojaList(){
   const area=document.getElementById('lojListArea');area.innerHTML='<div class="loading">Carregando...</div>';
   try{const {data:lojas,error}=await sb.from('lojistas').select('*').eq('ativo',true).order('categoria');if(error)throw error;
@@ -293,17 +288,43 @@ function toggleEye(){const i=admSenha;i.type=i.type==='password'?'text':'passwor
 function entrarAdmin(){if(admSenha.value===SENHA_ADMIN){sessionStorage.setItem('luzileva_admin','ok');abrirPainelAdmin();}else toast('Senha incorreta');}
 function sairAdmin(){sessionStorage.removeItem('luzileva_admin');adm_painel.classList.add('hidden');adm_login.classList.remove('hidden');admLogout.classList.add('hidden');admSenha.value='';}
 function abrirPainelAdmin(){adm_login.classList.add('hidden');adm_painel.classList.remove('hidden');admLogout.classList.remove('hidden');carregarLojistas();carregarPlan();}
+
+function comprimirImg(arq,maxW){return new Promise((res)=>{const img=new Image();const r=new FileReader();r.onload=e=>{img.onload=()=>{const sc=Math.min(1,maxW/img.width);const c=document.createElement('canvas');c.width=img.width*sc;c.height=img.height*sc;c.getContext('2d').drawImage(img,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',0.7));};img.src=e.target.result;};r.onerror=()=>res(null);r.readAsDataURL(arq);});}
+
 async function addLojista(){
-  const nome=loNome.value.trim(),cat=loCat.value,tel=loTel.value.trim(),email=loEmail.value.trim();const arq=loFoto.files[0];
-  if(!nome){toast('Preencha o nome da loja');return;}
+  const nome=loNome.value.trim(),cat=loCat.value,tel=loTel.value.trim(),email=loEmail.value.trim();
+  const arq=loFoto.files[0];
+  if(!nome){toast('⚠️ Preencha o NOME da loja',"#b45309");return;}
   addLojBtn.textContent='Salvando...';addLojBtn.disabled=true;
-  try{let url=null;
-    if(arq){const ext=arq.name.split('.').pop();const cam=`loja_${Date.now()}.${ext}`;const {error:up}=await sb.storage.from('fotos').upload(cam,arq);if(up)throw up;url=sb.storage.from('fotos').getPublicUrl(cam).data.publicUrl;}
-    const {error}=await sb.from('lojistas').insert({nome,categoria:cat,telefone:tel,email,senha:'-',foto_loja:url,ativo:true});if(error)throw error;
-    loNome.value='';loTel.value='';loEmail.value='';loFoto.value='';admFotoPrev.style.display='none';toast('Loja cadastrada! 💜');carregarLojistas();
-  }catch(e){toast('Erro ao cadastrar loja');console.error(e);}
+  let url=null;
+  // 1) Tenta subir a foto pro bucket; se falhar, embute a imagem (base64) na própria tabela
+  if(arq){
+    try{
+      const ext=(arq.name.split('.').pop()||'jpg');
+      const cam=`loja_${Date.now()}.${ext}`;
+      const {error:up}=await sb.storage.from('fotos').upload(cam,arq);
+      if(up){
+        console.warn('Bucket bloqueou, usando foto embutida:',up);
+        url=await comprimirImg(arq,500);
+      }else{
+        url=sb.storage.from('fotos').getPublicUrl(cam).data.publicUrl;
+      }
+    }catch(e){console.warn('Erro foto, tentando embutir:',e);try{url=await comprimirImg(arq,500);}catch(_){} }
+  }
+  // 2) Cadastra a loja (com ou sem foto)
+  try{
+    const {error}=await sb.from('lojistas').insert({nome,categoria:cat,telefone:tel,email,senha:'-',foto_loja:url,ativo:true});
+    if(error)throw error;
+    loNome.value='';loTel.value='';loEmail.value='';loFoto.value='';admFotoPrev.style.display='none';
+    toast('✅ Loja cadastrada com sucesso!',"#1a7a1a");
+    carregarLojistas();
+  }catch(e){
+    console.error('Erro loja:',e);
+    toast('❌ ERRO: '+(e.message||e.hint||'desconhecido'),"#dc2626");
+  }
   addLojBtn.textContent='Cadastrar loja';addLojBtn.disabled=false;
 }
+
 async function addProduto(){
   const lojaId=prLoja.value,nome=prNome.value.trim();let preco=prPreco.value.trim().replace(',','.');const arq=prFoto.files[0];
   if(!lojaId){toast('Selecione uma loja');return;}
@@ -311,13 +332,23 @@ async function addProduto(){
   const {data:ex}=await sb.from('produtos').select('id').eq('lojista_id',lojaId);
   if(ex&&ex.length>=5){toast('Máximo 5 produtos por loja');return;}
   addPrBtn.textContent='Salvando...';addPrBtn.disabled=true;
-  try{let url=null;
-    if(arq){const ext=arq.name.split('.').pop();const cam=`${lojaId}/${Date.now()}.${ext}`;const {error:up}=await sb.storage.from('fotos').upload(cam,arq);if(up)throw up;url=sb.storage.from('fotos').getPublicUrl(cam).data.publicUrl;}
+  let url=null;
+  if(arq){
+    try{
+      const ext=(arq.name.split('.').pop()||'jpg');const cam=`${lojaId}/${Date.now()}.${ext}`;
+      const {error:up}=await sb.storage.from('fotos').upload(cam,arq);
+      if(up){console.warn('Bucket bloqueou, embutindo:',up);url=await comprimirImg(arq,400);}
+      else{url=sb.storage.from('fotos').getPublicUrl(cam).data.publicUrl;}
+    }catch(e){console.warn(e);try{url=await comprimirImg(arq,400);}catch(_){} }
+  }
+  try{
     const {error}=await sb.from('produtos').insert({lojista_id:lojaId,nome,preco,foto:url});if(error)throw error;
-    prNome.value='';prPreco.value='';prFoto.value='';admProdPrev.style.display='none';toast('Produto adicionado! 💜');
-  }catch(e){toast('Erro ao adicionar produto');console.error(e);}
+    prNome.value='';prPreco.value='';prFoto.value='';admProdPrev.style.display='none';
+    toast('✅ Produto adicionado!',"#1a7a1a");
+  }catch(e){console.error(e);toast('❌ ERRO: '+(e.message||'desconhecido'),"#dc2626");}
   addPrBtn.textContent='Adicionar produto (máx. 5/loja)';addPrBtn.disabled=false;
 }
+
 async function carregarLojistas(){
   try{const {data,error}=await sb.from('lojistas').select('*').order('criado_em',{ascending:false});if(error)throw error;
     prLoja.innerHTML=data.map(l=>`<option value="${l.id}">${l.nome} (${l.categoria||''})</option>`).join('');
@@ -327,9 +358,8 @@ async function carregarLojistas(){
       div.innerHTML=`${f}<div class="li"><div class="ln">${l.nome}</div><div class="le">${l.categoria||''} · ${l.telefone||''}</div></div><button class="del" onclick="delLojista('${l.id}','${l.nome.replace(/'/g,"")}')">Excluir</button>`;listaLoj.appendChild(div);});
   }catch(e){listaLoj.innerHTML='<p>Erro.</p>';console.error(e);}
 }
-async function delLojista(id,nome){if(!confirm('Excluir a loja "'+nome+'"?'))return;try{await sb.from('lojistas').delete().eq('id',id);toast('Excluída');carregarLojistas();}catch(e){toast('Erro');}}
+async function delLojista(id,nome){if(!confirm('Excluir a loja "'+nome+'"?'))return;try{await sb.from('produtos').delete().eq('lojista_id',id);await sb.from('lojistas').delete().eq('id',id);toast('Excluída');carregarLojistas();}catch(e){toast('Erro');}}
 
-// Planilha manual (salva no aparelho)
 function carregarPlan(){const rows=JSON.parse(localStorage.getItem('luzileva_planilha')||'[]');document.getElementById('planRows').innerHTML='';if(!rows.length){addPlanRow();return;}rows.forEach(r=>addPlanRow(r));}
 function addPlanRow(r){r=r||{};const div=document.createElement('div');div.className='plan-row';
   div.innerHTML=`<input placeholder="data" value="${r.data||''}"><input placeholder="hora" value="${r.hora||''}"><input placeholder="R$" value="${r.valor||''}"><input placeholder="merc." value="${r.merc||''}"><input placeholder="motoboy" value="${r.moto||''}"><input placeholder="tel" value="${r.tel||''}">`;
