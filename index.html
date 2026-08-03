@@ -105,9 +105,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;m
     <div class="card c-cli" onclick="abrir('cliente')">
       <div class="ico">🛒</div><div class="info"><h3>Sou Cliente</h3><p>Veja o cardápio e peça pelo WhatsApp</p></div><span class="arrow">›</span>
     </div>
-    <div class="card c-loj" onclick="abrir('lojista')">
-      <div class="ico">🏪</div><div class="info"><h3>Sou Lojista</h3><p>Veja as lojas cadastradas</p></div><span class="arrow">›</span>
-    </div>
+    <a class="card c-loj" href="https://wa.me/5561994416273?text=Ol%C3%A1!%20Sou%20lojista%20e%20quero%20cadastrar%20minha%20loja%20no%20LuziLeva." target="_blank" style="text-decoration:none">
+      <div class="ico">🏪</div><div class="info"><h3>Sou Lojista</h3><p>Fale comigo pelo WhatsApp</p></div><span class="arrow">›</span>
+    </a>
     <a class="card c-mot" href="https://wa.me/5561994416273?text=Ol%C3%A1!%20Sou%20motoboy%20e%20quero%20fazer%20entregas%20pelo%20LuziLeva." target="_blank" style="text-decoration:none">
       <div class="ico">🛵</div><div class="info"><h3>Sou Motoboy</h3><p>Entre em contato pelo WhatsApp</p></div><span class="arrow">›</span>
     </a>
@@ -203,7 +203,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;m
 const SUPABASE_URL="https://infnanfbgouxuklqdfta.supabase.co";
 const SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImluZm5hbmZiZ291eHVrbHFkZnRhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk5NjA0ODMsImV4cCI6MjA5NTUzNjQ4M30.RYFSSZeDgBo5BWFuJ7In7S83gN_YAf6t-TCQDH21Uu0";
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-const SENHA_ADMIN="caneta1989#";
+const SENHA_ADMIN="KLM1940#";
 const ZAP_CENTRAL="5561994416273";
 const LINK_PAGAMENTO="https://link.mercadopago.com.br/luzilevaentregas";
 
@@ -246,9 +246,16 @@ async function carregarLojas(){
     for(const loja of lista){const {data:prods}=await sb.from('produtos').select('*').eq('lojista_id',loja.id).order('nome');area.appendChild(montarLoja(loja,prods||[]));}
   }catch(e){area.innerHTML='<div class="vazio">Erro ao carregar.</div>';console.error(e);}
 }
+function chamarLoja(tel){
+  const numero=(tel||'').replace(/\D/g,'');
+  if(!numero){toast('Essa loja ainda não tem WhatsApp cadastrado.',"#b45309");return;}
+  const msg=encodeURIComponent('Oba! Cliente do LuziLeva para você!!!');
+  window.open(`https://wa.me/${numero}?text=${msg}`,'_blank');
+}
 function montarLoja(loja,prods){
   const div=document.createElement('div');div.className='loja';
-  const foto=loja.foto_loja?`<img src="${loja.foto_loja}" class="loja-foto">`:`<div class="loja-foto-vazia">🏪</div>`;
+  const telLoja=(loja.telefone||'').replace(/'/g,"");
+  const foto=loja.foto_loja?`<img src="${loja.foto_loja}" class="loja-foto" style="cursor:pointer" onclick="chamarLoja('${telLoja}')">`:`<div class="loja-foto-vazia" style="cursor:pointer" onclick="chamarLoja('${telLoja}')">🏪</div>`;
   let ph='';
   if(!prods.length){ph='<p style="font-size:13px;color:#8a9a8a;margin-top:10px">Sem produtos ainda.</p>';}
   else{ph='<div class="produtos">';
@@ -289,16 +296,44 @@ function entrarAdmin(){if(admSenha.value===SENHA_ADMIN){sessionStorage.setItem('
 function sairAdmin(){sessionStorage.removeItem('luzileva_admin');adm_painel.classList.add('hidden');adm_login.classList.remove('hidden');admLogout.classList.add('hidden');admSenha.value='';}
 function abrirPainelAdmin(){adm_login.classList.add('hidden');adm_painel.classList.remove('hidden');admLogout.classList.remove('hidden');carregarLojistas();carregarPlan();}
 
-function comprimirImg(arq,maxW){return new Promise((res)=>{const img=new Image();const r=new FileReader();r.onload=e=>{img.onload=()=>{const sc=Math.min(1,maxW/img.width);const c=document.createElement('canvas');c.width=img.width*sc;c.height=img.height*sc;c.getContext('2d').drawImage(img,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',0.7));};img.src=e.target.result;};r.onerror=()=>res(null);r.readAsDataURL(arq);});}
+function comprimirImg(arq,maxW){
+  return new Promise((res)=>{
+    let pronto=false;
+    const finalizar=(v)=>{if(pronto)return;pronto=true;res(v);};
+    const seguranca=setTimeout(()=>finalizar(null),8000); // nunca trava a tela mesmo se a foto não puder ser lida
+    const img=new Image();const r=new FileReader();
+    r.onload=e=>{
+      img.onload=()=>{
+        clearTimeout(seguranca);
+        try{
+          const sc=Math.min(1,maxW/img.width);
+          const c=document.createElement('canvas');
+          c.width=img.width*sc;c.height=img.height*sc;
+          c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+          finalizar(c.toDataURL('image/jpeg',0.7));
+        }catch(_){finalizar(null);}
+      };
+      img.onerror=()=>{clearTimeout(seguranca);finalizar(null);};
+      img.src=e.target.result;
+    };
+    r.onerror=()=>{clearTimeout(seguranca);finalizar(null);};
+    r.readAsDataURL(arq);
+  });
+}
+function fotoValida(arq){
+  if(!arq)return true;
+  if(arq.size>10*1024*1024){toast('⚠️ Foto muito grande (máx. 10MB). Vai ser salva sem foto.',"#b45309");return false;}
+  return true;
+}
 
 async function addLojista(){
-  const nome=loNome.value.trim(),cat=loCat.value,tel=loTel.value.trim(),email=loEmail.value.trim();
+  const nome=loNome.value.trim(),cat=loCat.value,tel=loTel.value.trim().replace(/\D/g,''),email=loEmail.value.trim();
   const arq=loFoto.files[0];
   if(!nome){toast('⚠️ Preencha o NOME da loja',"#b45309");return;}
   addLojBtn.textContent='Salvando...';addLojBtn.disabled=true;
   let url=null;
   // 1) Tenta subir a foto pro bucket; se falhar, embute a imagem (base64) na própria tabela
-  if(arq){
+  if(arq&&fotoValida(arq)){
     try{
       const ext=(arq.name.split('.').pop()||'jpg');
       const cam=`loja_${Date.now()}.${ext}`;
@@ -310,6 +345,7 @@ async function addLojista(){
         url=sb.storage.from('fotos').getPublicUrl(cam).data.publicUrl;
       }
     }catch(e){console.warn('Erro foto, tentando embutir:',e);try{url=await comprimirImg(arq,500);}catch(_){} }
+    if(!url)toast('⚠️ Não deu para anexar essa foto (tente um JPG ou PNG). A loja foi salva sem foto — você pode editar depois.',"#b45309");
   }
   // 2) Cadastra a loja (com ou sem foto)
   try{
@@ -333,13 +369,14 @@ async function addProduto(){
   if(ex&&ex.length>=5){toast('Máximo 5 produtos por loja');return;}
   addPrBtn.textContent='Salvando...';addPrBtn.disabled=true;
   let url=null;
-  if(arq){
+  if(arq&&fotoValida(arq)){
     try{
       const ext=(arq.name.split('.').pop()||'jpg');const cam=`${lojaId}/${Date.now()}.${ext}`;
       const {error:up}=await sb.storage.from('fotos').upload(cam,arq);
       if(up){console.warn('Bucket bloqueou, embutindo:',up);url=await comprimirImg(arq,400);}
       else{url=sb.storage.from('fotos').getPublicUrl(cam).data.publicUrl;}
     }catch(e){console.warn(e);try{url=await comprimirImg(arq,400);}catch(_){} }
+    if(!url)toast('⚠️ Não deu para anexar essa foto (tente um JPG ou PNG). O produto foi salvo sem foto.',"#b45309");
   }
   try{
     const {error}=await sb.from('produtos').insert({lojista_id:lojaId,nome,preco,foto:url});if(error)throw error;
