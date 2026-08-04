@@ -164,8 +164,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;m
     <div class="box" id="adm_login">
       <h2 style="color:#581c87">🔐 Acesso restrito</h2>
       <p style="font-size:13px;color:#7a6a8a;margin-bottom:14px">Somente a administração da LuziLeva.</p>
+      <div class="field"><label>E-mail do administrador</label>
+        <input id="admEmail" type="email" placeholder="seu@email.com" autocomplete="username">
+      </div>
       <div class="field"><label>Senha de administrador</label>
-        <div class="pwrap"><input id="admSenha" type="password" placeholder="Digite sua senha"><span class="eye" onclick="toggleEye()">👁️</span></div>
+        <div class="pwrap"><input id="admSenha" type="password" placeholder="Digite sua senha" autocomplete="current-password"><span class="eye" onclick="toggleEye()">👁️</span></div>
       </div>
       <button class="btn" style="background:#7c3aed" onclick="entrarAdmin()">Entrar</button>
     </div>
@@ -202,7 +205,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;m
 const SUPABASE_URL="https://infnanfbgouxuklqdfta.supabase.co";
 const SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImluZm5hbmZiZ291eHVrbHFkZnRhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk5NjA0ODMsImV4cCI6MjA5NTUzNjQ4M30.RYFSSZeDgBo5BWFuJ7In7S83gN_YAf6t-TCQDH21Uu0";
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-const SENHA_ADMIN="KLM1940#";
+// A senha do admin NÃO fica mais no código. A validação é feita pelo Supabase Auth.
 const ZAP_CENTRAL="5561994416273";
 const LINK_PAGAMENTO="https://link.mercadopago.com.br/luzilevaentregas";
 
@@ -290,10 +293,32 @@ async function carregarLojaList(){
 }
 
 // ===== ADMIN =====
-function initAdmin(){if(sessionStorage.getItem('luzileva_admin')==='ok')abrirPainelAdmin();}
+async function initAdmin(){
+  try{
+    const {data}=await sb.auth.getSession();
+    if(data&&data.session)abrirPainelAdmin();
+  }catch(e){console.warn('sessao',e);}
+}
 function toggleEye(){const i=admSenha;i.type=i.type==='password'?'text':'password';}
-function entrarAdmin(){if(admSenha.value===SENHA_ADMIN){sessionStorage.setItem('luzileva_admin','ok');abrirPainelAdmin();}else toast('Senha incorreta');}
-function sairAdmin(){sessionStorage.removeItem('luzileva_admin');adm_painel.classList.add('hidden');adm_login.classList.remove('hidden');admLogout.classList.add('hidden');admSenha.value='';}
+async function entrarAdmin(){
+  const email=(admEmail.value||'').trim(), senha=admSenha.value||'';
+  if(!email||!senha){toast('Preencha e-mail e senha',"#b45309");return;}
+  const btn=document.querySelector('#adm_login .btn'); const txt=btn.textContent; btn.textContent='Entrando...'; btn.disabled=true;
+  try{
+    const {data,error}=await sb.auth.signInWithPassword({email,password:senha});
+    if(error)throw error;
+    if(!data||!data.session)throw new Error('Sessão não criada');
+    admSenha.value='';
+    abrirPainelAdmin();
+  }catch(e){
+    console.error(e);
+    toast('❌ E-mail ou senha incorretos',"#dc2626");
+  }finally{btn.textContent=txt;btn.disabled=false;}
+}
+async function sairAdmin(){
+  try{await sb.auth.signOut();}catch(_){}
+  adm_painel.classList.add('hidden');adm_login.classList.remove('hidden');admLogout.classList.add('hidden');admSenha.value='';
+}
 function abrirPainelAdmin(){adm_login.classList.add('hidden');adm_painel.classList.remove('hidden');admLogout.classList.remove('hidden');carregarLojistas();carregarPlan();}
 
 function comprimirImg(arq,maxW){
@@ -356,7 +381,10 @@ async function addLojista(){
     carregarLojistas();
   }catch(e){
     console.error('Erro loja:',e);
-    toast('❌ ERRO: '+(e.message||e.hint||'desconhecido'),"#dc2626");
+    const msg=(e&&(e.message||e.hint||e.details))||'desconhecido';
+    let cx=document.getElementById('erroAdm');
+    if(!cx){cx=document.createElement('div');cx.id='erroAdm';cx.style.cssText='background:#fee2e2;border:2px solid #dc2626;color:#7f1d1d;padding:12px;border-radius:10px;margin-top:12px;font-size:13px;font-weight:600';addLojBtn.parentNode.appendChild(cx);}
+    cx.innerHTML='❌ NÃO SALVOU:<br>'+msg;
   }
   addLojBtn.textContent='Cadastrar loja';addLojBtn.disabled=false;
 }
