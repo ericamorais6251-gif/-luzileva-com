@@ -138,6 +138,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;m
       </div>
     </div>
     <div id="cli_cardapio" class="hidden">
+      <div class="field"><label>🔍 Lojas em qual cidade?</label><input id="buscaCidade" list="cidadeListCliente" placeholder="Ex.: Anápolis" oninput="carregarLojas()"><datalist id="cidadeListCliente"></datalist></div>
       <div class="cats" id="cats"></div>
       <div id="lojasArea"></div>
     </div>
@@ -178,6 +179,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;m
         <div class="field"><label>Foto da loja (opcional)</label><input type="file" id="loFoto" accept="image/*" onchange="prevFoto('loFoto','admFotoPrev')"></div>
         <div class="field"><label>Nome da loja</label><input id="loNome" placeholder="Ex.: Drogaria Drogalima"></div>
         <div class="field"><label>Categoria</label><select id="loCat"><option>Restaurante</option><option>Quitanda</option><option>Lanches</option><option>Farmácia</option><option>Serviços</option></select></div>
+        <div class="field"><label>Cidade</label><input id="loCidade" list="cidadeList" placeholder="Ex.: Anápolis"><datalist id="cidadeList"><option>Luziânia</option><option>Anápolis</option><option>Goiânia</option><option>Brasília</option><option>Pirenópolis</option><option>São Paulo</option></datalist></div>
         <div class="field"><label>Telefone da loja</label><input id="loTel" placeholder="5561999999999" inputmode="tel"></div>
         <button class="btn" style="background:#7c3aed" id="addLojBtn" onclick="addLojista()">Cadastrar loja</button>
       </div>
@@ -242,8 +244,14 @@ async function carregarLojas(){
   const area=lojasArea;area.innerHTML='<div class="loading">Carregando lojas...</div>';
   try{let q=sb.from('lojistas').select('*').eq('ativo',true);
     const {data:lojas,error}=await q.order('nome');if(error)throw error;
+    const cidadesUnicas=[...new Set((lojas||[]).map(l=>l.cidade||'Luziânia'))].sort();
+    const dl=document.getElementById('cidadeListCliente');
+    if(dl)dl.innerHTML=cidadesUnicas.map(c=>`<option>${c}</option>`).join('');
     let lista=lojas||[];if(catAtual!=='Todos')lista=lista.filter(l=>l.categoria===catAtual);
-    if(!lista.length){area.innerHTML='<div class="vazio"><div class="em">🏪</div>Nenhuma loja nesta categoria ainda.</div>';return;}
+    const buscaCidadeEl=document.getElementById('buscaCidade');
+    const termoCidade=(buscaCidadeEl?buscaCidadeEl.value:'').trim().toLowerCase();
+    if(termoCidade)lista=lista.filter(l=>(l.cidade||'Luziânia').toLowerCase().includes(termoCidade));
+    if(!lista.length){area.innerHTML='<div class="vazio"><div class="em">🏪</div>Nenhuma loja encontrada.</div>';return;}
     area.innerHTML='';
     for(const loja of lista){const {data:prods}=await sb.from('produtos').select('*').eq('lojista_id',loja.id).order('nome');area.appendChild(montarLoja(loja,prods||[]));}
   }catch(e){area.innerHTML='<div class="vazio">Erro ao carregar.<br><small style="font-size:11px;color:#b45309">'+((e&&(e.message||e.hint||e.details))||'sem detalhe')+'</small></div>';console.error(e);}
@@ -267,7 +275,7 @@ function montarLoja(loja,prods){
     ph+='</div>';
     ph+=`<button class="btn" style="background:#2d6a2d;margin-top:12px" onclick="fazerPedido(event,'${loja.nome.replace(/'/g,"")}','${loja.telefone||''}')">Pedir pelo WhatsApp</button>`;
   }
-  div.innerHTML=`${foto}<div class="loja-body"><h3>${loja.nome}</h3><span class="loja-cat">${loja.categoria||''}</span><div class="loja-end">📍 ${loja.endereco||'Luziânia/GO'}</div>${ph}${btnZap}</div>`;
+  div.innerHTML=`${foto}<div class="loja-body"><h3>${loja.nome}</h3><span class="loja-cat">${loja.categoria||''}</span><div class="loja-end">📍 ${loja.endereco||((loja.cidade||'Luziânia')+'/GO')}</div>${ph}${btnZap}</div>`;
   return div;
 }
 function fazerPedido(ev,lojaNome,lojaTel){
@@ -325,7 +333,7 @@ function comprimirImg(arq,maxW){
   return new Promise((res)=>{
     let pronto=false;
     const finalizar=(v)=>{if(pronto)return;pronto=true;res(v);};
-    const seguranca=setTimeout(()=>finalizar(null),8000); // nunca trava a tela mesmo se a foto não puder ser lida
+    const seguranca=setTimeout(()=>finalizar(null),8000);
     const img=new Image();const r=new FileReader();
     r.onload=e=>{
       img.onload=()=>{
@@ -352,12 +360,11 @@ function fotoValida(arq){
 }
 
 async function addLojista(){
-  const nome=loNome.value.trim(),cat=loCat.value,tel=loTel.value.trim().replace(/\D/g,''),email='';
+  const nome=loNome.value.trim(),cat=loCat.value,cidade=loCidade.value.trim()||'Luziânia',tel=loTel.value.trim().replace(/\D/g,''),email='';
   const arq=loFoto.files[0];
   if(!nome){toast('⚠️ Preencha o NOME da loja',"#b45309");return;}
   addLojBtn.textContent='Salvando...';addLojBtn.disabled=true;
   let url=null;
-  // 1) Tenta subir a foto pro bucket; se falhar, embute a imagem (base64) na própria tabela
   if(arq&&fotoValida(arq)){
     try{
       const ext=(arq.name.split('.').pop()||'jpg');
@@ -372,11 +379,10 @@ async function addLojista(){
     }catch(e){console.warn('Erro foto, tentando embutir:',e);try{url=await comprimirImg(arq,500);}catch(_){} }
     if(!url)toast('⚠️ Não deu para anexar essa foto (tente um JPG ou PNG). A loja foi salva sem foto — você pode editar depois.',"#b45309");
   }
-  // 2) Cadastra a loja (com ou sem foto)
   try{
-    const {error}=await sb.from('lojistas').insert({nome,categoria:cat,telefone:tel,email,senha:'-',foto_loja:url,ativo:true});
+    const {error}=await sb.from('lojistas').insert({nome,categoria:cat,cidade,telefone:tel,email,senha:'-',foto_loja:url,ativo:true});
     if(error)throw error;
-    loNome.value='';loTel.value='';loFoto.value='';admFotoPrev.style.display='none';
+    loNome.value='';loTel.value='';loCidade.value='';loFoto.value='';admFotoPrev.style.display='none';
     toast('✅ Loja cadastrada com sucesso!',"#1a7a1a");
     carregarLojistas();
   }catch(e){
@@ -420,7 +426,7 @@ async function carregarLojistas(){
     if(!data.length){listaLoj.innerHTML='<p style="font-size:13px;color:#8a7a9a">Nenhuma loja ainda.</p>';return;}
     listaLoj.innerHTML='';data.forEach(l=>{const div=document.createElement('div');div.className='loja-item';
       const f=l.foto_loja?`<img src="${l.foto_loja}">`:`<div style="width:48px;height:48px;border-radius:8px;background:#ede0f5;display:flex;align-items:center;justify-content:center;font-size:22px">🏪</div>`;
-      div.innerHTML=`${f}<div class="li"><div class="ln">${l.nome}</div><div class="le">${l.categoria||''} · ${l.telefone||''}</div></div><button class="del" onclick="delLojista('${l.id}','${l.nome.replace(/'/g,"")}')">Excluir</button>`;listaLoj.appendChild(div);});
+      div.innerHTML=`${f}<div class="li"><div class="ln">${l.nome}</div><div class="le">${l.categoria||''} · ${l.cidade||'Luziânia'} · ${l.telefone||''}</div></div><button class="del" onclick="delLojista('${l.id}','${l.nome.replace(/'/g,"")}')">Excluir</button>`;listaLoj.appendChild(div);});
   }catch(e){listaLoj.innerHTML='<p>Erro.</p>';console.error(e);}
 }
 async function delLojista(id,nome){if(!confirm('Excluir a loja "'+nome+'"?'))return;try{await sb.from('produtos').delete().eq('lojista_id',id);await sb.from('lojistas').delete().eq('id',id);toast('Excluída');carregarLojistas();}catch(e){toast('Erro');}}
