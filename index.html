@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LuziLeva — O comércio de Luziânia na sua porta</title>
+<title>LuziLeva — O comércio da sua cidade na palma da sua mão</title>
 <link rel="manifest" href="data:application/json,%7B%22name%22%3A%22LuziLeva%22%2C%22short_name%22%3A%22LuziLeva%22%2C%22start_url%22%3A%22%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%231a3d1f%22%2C%22theme_color%22%3A%22%231a3d1f%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22%2Ficon.svg%22%2C%22sizes%22%3A%22any%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D">
 <meta name="theme-color" content="#1a3d1f">
 <link rel="icon" type="image/svg+xml" href="/icon.svg">
@@ -85,22 +85,34 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;m
 .loja-item img{width:48px;height:48px;border-radius:8px;object-fit:contain;background:#fff;flex-shrink:0}
 .loja-item .li{flex:1}.loja-item .ln{font-size:14px;font-weight:800}
 .loja-item .le{font-size:12px;color:#7a6a8a}
+.loja.vip{border:2.5px solid #d4a017;box-shadow:0 4px 18px rgba(212,160,23,.28)}
+.selo-vip{display:inline-block;background:#fef3c7;color:#92400e;font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px;margin:4px 6px 0 0;border:1px solid #f5d77a}
+.acoes{display:flex;flex-direction:column;gap:6px}
+.ed{background:#ede9fe;color:#6d28d9;border:none;border-radius:8px;padding:8px 10px;font-weight:800;cursor:pointer;font-size:13px}
 .del{background:#fee2e2;color:#dc2626;border:none;border-radius:8px;padding:8px 10px;font-weight:800;cursor:pointer;font-size:13px}
 .plan-row{display:flex;gap:6px;margin-bottom:6px}
 .plan-row input{flex:1;border:1px solid #e0d5ed;border-radius:8px;padding:8px;font-size:12px;font-family:inherit}
 .plan-head{display:flex;gap:6px;margin-bottom:6px;font-size:11px;font-weight:800;color:#581c87}
 .plan-head div{flex:1}
+.aceite{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:#3a4a3a;margin:4px 0 14px;line-height:1.4}
+.aceite input{width:22px;height:22px;flex-shrink:0;margin-top:1px;accent-color:#2d6a2d}
+.aceite a{color:#1a4a1a;font-weight:700}
+.modal-fundo{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:300;display:flex;align-items:flex-end;justify-content:center}
+.modal{background:#fff;border-radius:18px 18px 0 0;max-width:600px;width:100%;max-height:85vh;overflow-y:auto;padding:22px 20px 26px}
+.modal h2{font-size:18px;font-weight:800;color:#1a4a1a;margin-bottom:10px}
+.modal h3{font-size:14px;font-weight:800;color:#1a4a1a;margin:14px 0 4px}
+.modal p{font-size:13px;color:#3a4a3a;line-height:1.5}
 </style>
 </head>
 <body>
 
 <!-- HOME -->
 <div id="home">
-  <div class="security">🛡️ DADOS PROTEGIDOS PELA LGPD · LUZIÂNIA/GO</div>
+  <div class="security">🛡️ DADOS PROTEGIDOS PELA LGPD · BRASIL 🇧🇷</div>
   <div class="hero">
     <div class="moto">🛵</div>
     <div class="brand">Luzi<span class="y">Leva</span></div>
-    <div class="tagline">O comércio de Luziânia na sua porta 💚</div>
+    <div class="tagline">O comércio da sua cidade na palma da sua mão ✋</div>
     <a class="iglink" href="https://www.instagram.com/erica_morais_cno" target="_blank">📸 @erica_morais_cno</a>
   </div>
   <div class="profiles">
@@ -127,7 +139,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;m
 <div id="cliente" class="hidden">
   <div class="topbar t-cli">
     <span class="back" onclick="abrir('home')">‹</span>
-    <div><h1>🛒 Sou Cliente</h1><div class="sub">Lojas de Luziânia na sua porta</div></div>
+    <div><h1>🛒 Sou Cliente</h1><div class="sub">O comércio da sua cidade na palma da mão</div></div>
   </div>
   <div class="wrap">
     <div class="box banner" id="cli_cadastro">
@@ -136,11 +148,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;m
       <div style="margin-top:14px">
         <div class="field"><label>Seu WhatsApp</label><input id="cTel" placeholder="(61) 99999-9999" inputmode="tel"></div>
         <div class="field"><label>Seu e-mail</label><input id="cEmail" placeholder="seuemail@exemplo.com" inputmode="email"></div>
+        <label class="aceite"><input type="checkbox" id="cAceite"><span>Li e aceito a <a href="#" onclick="abrirPrivacidade();return false;">Política de Privacidade e Termos de Uso</a> do LuziLeva.</span></label>
         <button class="btn" style="background:#2d6a2d" onclick="cadastrarCliente()">Entrar e ver o cardápio</button>
       </div>
     </div>
     <div id="cli_cardapio" class="hidden">
-      <div class="field"><label>🔍 Lojas em qual cidade?</label><input id="buscaCidade" list="cidadeListCliente" placeholder="Ex.: Anápolis" oninput="carregarLojas()"><datalist id="cidadeListCliente"></datalist></div>
+      <div class="field"><label>🔍 O que você procura?</label><input id="buscaCidade" placeholder="Ex.: Luziânia farmácia · DF pizza" oninput="renderLojas()"><div class="help">Digite a cidade ou o estado e o que procura.</div></div>
       <div class="cats" id="cats"></div>
       <div id="lojasArea"></div>
     </div>
@@ -151,7 +164,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;m
 <div id="lojista" class="hidden">
   <div class="topbar t-loj">
     <span class="back" onclick="abrir('home')">‹</span>
-    <div><h1>🏪 Lojas cadastradas</h1><div class="sub">Comércio de Luziânia</div></div>
+    <div><h1>🏪 Lojas cadastradas</h1><div class="sub">Comércio de todo o Brasil</div></div>
   </div>
   <div class="wrap"><div id="lojListArea"><div class="loading">Carregando...</div></div></div>
 </div>
@@ -176,14 +189,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;m
       <button class="btn" style="background:#7c3aed" onclick="entrarAdmin()">Entrar</button>
     </div>
     <div id="adm_painel" class="hidden">
-      <div class="box"><h2 style="color:#581c87">➕ Cadastrar loja</h2>
+      <div class="box"><h2 style="color:#581c87" id="tituloCad">➕ Cadastrar loja</h2>
         <img id="admFotoPrev" class="foto-preview">
         <div class="field"><label>Foto da loja (opcional)</label><input type="file" id="loFoto" accept="image/*" onchange="prevFoto('loFoto','admFotoPrev')"></div>
         <div class="field"><label>Nome da loja</label><input id="loNome" placeholder="Ex.: Drogaria Drogalima"></div>
         <div class="field"><label>Categoria</label><select id="loCat"></select></div>
         <div class="field"><label>Cidade</label><input id="loCidade" list="cidadeList" placeholder="Ex.: Anápolis"><datalist id="cidadeList"><option>Luziânia</option><option>Anápolis</option><option>Goiânia</option><option>Brasília</option><option>Pirenópolis</option><option>São Paulo</option></datalist></div>
+        <div class="field"><label>Estado (UF)</label><select id="loUF"></select></div>
         <div class="field"><label>Telefone da loja</label><input id="loTel" placeholder="5561999999999" inputmode="tel"></div>
         <button class="btn" style="background:#7c3aed" id="addLojBtn" onclick="addLojista()">Cadastrar loja</button>
+        <button class="btn hidden" style="background:#8a7a9a;margin-top:8px" id="cancelEdBtn" onclick="cancelarEdicao()">Cancelar edição</button>
       </div>
       <div class="box"><h2 style="color:#581c87">🛍️ Adicionar produto a uma loja</h2>
         <img id="admProdPrev" class="foto-preview">
@@ -205,6 +220,26 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;m
   </div>
 </div>
 
+<div id="privacidade" class="modal-fundo hidden" onclick="if(event.target===this)fecharPrivacidade()">
+  <div class="modal">
+    <h2>🛡️ Política de Privacidade e Termos de Uso</h2>
+    <p>O LuziLeva é mantido pela CNO — Cibernacional Operations, CNPJ 49.817.654/0001-00, Luziânia/GO, responsável pelo tratamento dos seus dados conforme a Lei Geral de Proteção de Dados (Lei 13.709/2018).</p>
+    <h3>Quais dados coletamos</h3>
+    <p>Apenas o seu número de WhatsApp e o seu e-mail, informados por você no cadastro.</p>
+    <h3>Para que usamos</h3>
+    <p>Para identificar você quando fizer contato ou pedido a uma loja pelo WhatsApp, e para comunicações do LuziLeva. Quando você faz um pedido, seu telefone é enviado junto na mensagem.</p>
+    <h3>O que não fazemos</h3>
+    <p>Não vendemos nem alugamos seus dados. Não usamos cookies de rastreamento nem de publicidade. O site guarda seu telefone e e-mail apenas no seu próprio aparelho, para não pedir de novo a cada visita.</p>
+    <h3>Onde ficam guardados</h3>
+    <p>Em servidor seguro, com acesso restrito à administração do LuziLeva.</p>
+    <h3>Seus direitos</h3>
+    <p>Você pode pedir, a qualquer momento, para ver, corrigir ou apagar seus dados, e retirar este consentimento, pelo WhatsApp (61) 99441-6273.</p>
+    <h3>Sobre as lojas</h3>
+    <p>O LuziLeva é uma vitrine que conecta você às lojas. Preços, produtos, entregas e atendimento são de responsabilidade de cada loja.</p>
+    <button class="btn" style="background:#2d6a2d;margin-top:18px" onclick="fecharPrivacidade()">Entendi</button>
+  </div>
+</div>
+
 <script>
 const SUPABASE_URL="https://infnanfbgouxuklqdfta.supabase.co";
 const SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImluZm5hbmZiZ291eHVrbHFkZnRhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk5NjA0ODMsImV4cCI6MjA5NTUzNjQ4M30.RYFSSZeDgBo5BWFuJ7In7S83gN_YAf6t-TCQDH21Uu0";
@@ -212,8 +247,16 @@ const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 // A senha do admin NÃO fica mais no código. A validação é feita pelo Supabase Auth.
 const ZAP_CENTRAL="5561994416273";
 const LINK_PAGAMENTO="https://link.mercadopago.com.br/luzilevaentregas";
-const CATEGORIAS=['Restaurante','Quitanda','Lanches','Farmácia','Lojas','Pet','Mercado','Agropecuária','Imobiliária','Venda de carros','Serviços'];
-const ICONES={'Todos':'🏙️','Restaurante':'🍽️','Quitanda':'🍎','Lanches':'🍔','Farmácia':'💊','Lojas':'🛍️','Pet':'🐾','Mercado':'🛒','Agropecuária':'🌾','Imobiliária':'🏠','Venda de carros':'🚗','Serviços':'🔧'};
+const CATEGORIAS=['Restaurante','Quitanda','Lanches','Farmácia','Lojas','Pet','Mercado','Agropecuária','Imobiliária','Aluguel de imóvel','Hotéis e pousadas','Passagens aéreas','Venda de carros','Serviços'];
+const ICONES={'Todos':'🏙️','Restaurante':'🍽️','Quitanda':'🍞','Lanches':'🍔','Farmácia':'💊','Lojas':'🛍️','Pet':'🐾','Mercado':'🛒','Agropecuária':'🌾','Imobiliária':'🏠','Aluguel de imóvel':'🔑','Hotéis e pousadas':'🏨','Passagens aéreas':'✈️','Venda de carros':'🚗','Serviços':'🔧'};
+const UFS=['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO'];
+document.getElementById('loUF').innerHTML=UFS.map(u=>`<option${u==='GO'?' selected':''}>${u}</option>`).join('');
+function norm(t){return (t||'').toString().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\s+/g,' ').trim();}
+function ehVip(l){return (l.nome||'').trim().startsWith('👑');}
+function nomeSemCoroa(n){return (n||'').replace(/^\s*👑[\s·\-–—:|]*/u,'');}
+function chaveNome(l){return norm(nomeSemCoroa(l.nome)).replace(/^[^a-z0-9]+/,'');}
+function ordenarLojas(lista,pts){return lista.sort((a,b)=>(ehVip(b)-ehVip(a))||(pts?pts(b)-pts(a):0)||chaveNome(a).localeCompare(chaveNome(b)));}
+const PARADAS=['de','da','do','das','dos','e','em','na','no','nas','nos','a','o','para','pra'];
 document.getElementById('loCat').innerHTML=CATEGORIAS.map(c=>`<option>${c}</option>`).join('');
 
 function toast(m,cor){const t=document.createElement('div');t.className='toast';t.textContent=m;if(cor)t.style.background=cor;document.body.appendChild(t);setTimeout(()=>t.remove(),4500);}
@@ -230,12 +273,17 @@ function abrir(tela){
 // ===== CLIENTE =====
 let clienteAtual=JSON.parse(localStorage.getItem('luzileva_cliente')||'null');
 let catAtual='Todos';
-function initCliente(){if(clienteAtual)mostrarCardapio();}
+let LOJAS=null,PRODS={};
+function initCliente(){LOJAS=null;if(clienteAtual&&clienteAtual.aceite)mostrarCardapio();}
+function abrirPrivacidade(){document.getElementById('privacidade').classList.remove('hidden');}
+function fecharPrivacidade(){document.getElementById('privacidade').classList.add('hidden');}
 async function cadastrarCliente(){
   const tel=cTel.value.trim(),email=cEmail.value.trim();
   if(!tel||!email){toast('Preencha telefone e e-mail');return;}
-  clienteAtual={telefone:tel,email};localStorage.setItem('luzileva_cliente',JSON.stringify(clienteAtual));
-  try{await sb.from('clientes').upsert({telefone:tel,email:email,nome:email},{onConflict:'telefone',ignoreDuplicates:true});}catch(e){console.warn(e);}
+  if(!document.getElementById('cAceite').checked){toast('⚠️ Para continuar, marque que aceita a Política de Privacidade',"#b45309");return;}
+  const aceite=new Date().toISOString();
+  clienteAtual={telefone:tel,email,aceite};localStorage.setItem('luzileva_cliente',JSON.stringify(clienteAtual));
+  try{await sb.from('clientes').upsert({telefone:tel,email:email,nome:email,aceite_privacidade_em:aceite},{onConflict:'telefone',ignoreDuplicates:true});}catch(e){console.warn(e);}
   mostrarCardapio();toast('Pronto! Veja o cardápio 💚');
 }
 function mostrarCardapio(){
@@ -246,20 +294,43 @@ function mostrarCardapio(){
 }
 function filtrarCat(c){catAtual=c;mostrarCardapio();}
 async function carregarLojas(){
-  const area=lojasArea;area.innerHTML='<div class="loading">Carregando lojas...</div>';
-  try{let q=sb.from('lojistas').select('*').eq('ativo',true);
-    const {data:lojas,error}=await q.order('nome');if(error)throw error;
-    const cidadesUnicas=[...new Set((lojas||[]).map(l=>l.cidade||'Luziânia'))].sort();
-    const dl=document.getElementById('cidadeListCliente');
-    if(dl)dl.innerHTML=cidadesUnicas.map(c=>`<option>${c}</option>`).join('');
-    let lista=lojas||[];if(catAtual!=='Todos')lista=lista.filter(l=>l.categoria===catAtual);
-    const buscaCidadeEl=document.getElementById('buscaCidade');
-    const termoCidade=(buscaCidadeEl?buscaCidadeEl.value:'').trim().toLowerCase();
-    if(termoCidade)lista=lista.filter(l=>(l.cidade||'Luziânia').toLowerCase().includes(termoCidade));
-    if(!lista.length){area.innerHTML='<div class="vazio"><div class="em">🏪</div>Nenhuma loja encontrada.</div>';return;}
-    area.innerHTML='';
-    for(const loja of lista){const {data:prods}=await sb.from('produtos').select('*').eq('lojista_id',loja.id).order('nome');area.appendChild(montarLoja(loja,prods||[]));}
-  }catch(e){area.innerHTML='<div class="vazio">Erro ao carregar.<br><small style="font-size:11px;color:#b45309">'+((e&&(e.message||e.hint||e.details))||'sem detalhe')+'</small></div>';console.error(e);}
+  const area=lojasArea;
+  if(!LOJAS){
+    area.innerHTML='<div class="loading">Carregando lojas...</div>';
+    try{
+      const {data,error}=await sb.from('lojistas').select('*').eq('ativo',true).order('nome');if(error)throw error;
+      LOJAS=data||[];
+      const {data:pr}=await sb.from('produtos').select('*').order('nome');
+      PRODS={};(pr||[]).forEach(p=>{(PRODS[p.lojista_id]=PRODS[p.lojista_id]||[]).push(p);});
+    }catch(e){LOJAS=null;area.innerHTML='<div class="vazio">Erro ao carregar.<br><small style="font-size:11px;color:#b45309">'+((e&&(e.message||e.hint||e.details))||'sem detalhe')+'</small></div>';console.error(e);return;}
+  }
+  renderLojas();
+}
+function localDe(l){return norm((l.cidade||'Luziânia')+' '+(l.estado||'')).split(/[\s\-\/]+/);}
+function renderLojas(){
+  const area=lojasArea;if(!LOJAS)return;
+  let lista=LOJAS.slice();
+  if(catAtual!=='Todos')lista=lista.filter(l=>l.categoria===catAtual);
+  const busca=document.getElementById('buscaCidade');
+  const termo=norm(busca?busca.value:'');
+  if(termo){
+    const palavras=termo.split(' ').filter(p=>p&&!PARADAS.includes(p));
+    const locais=[],outras=[];
+    palavras.forEach(p=>{(LOJAS.some(l=>localDe(l).includes(p))?locais:outras).push(p);});
+    const bate=(txt,p)=>txt.includes(p)||(p.length>3&&p.endsWith('s')&&txt.includes(p.slice(0,-1)));
+    lista=lista.filter(l=>{
+      const loc=localDe(l);
+      if(!locais.every(p=>loc.includes(p)))return false;
+      if(!outras.length)return true;
+      const txt=norm(l.nome+' '+(l.categoria||''));
+      return outras.some(p=>bate(txt,p));
+    });
+    if(outras.length){const pts=l=>{const txt=norm(l.nome+' '+(l.categoria||''));return outras.filter(p=>bate(txt,p)).length;};ordenarLojas(lista,pts);}else ordenarLojas(lista);
+  }
+  if(!lista.length){area.innerHTML='<div class="vazio"><div class="em">🏪</div>Nenhuma loja encontrada.<br><small>Tente outra palavra ou outra cidade.</small></div>';return;}
+  area.innerHTML='';
+  if(!termo)ordenarLojas(lista);
+  lista.forEach(l=>area.appendChild(montarLoja(l,PRODS[l.id]||[])));
 }
 function chamarLoja(tel){
   const numero=(tel||'').replace(/\D/g,'');
@@ -268,7 +339,7 @@ function chamarLoja(tel){
   window.open(`https://wa.me/${numero}?text=${msg}`,'_blank');
 }
 function montarLoja(loja,prods){
-  const div=document.createElement('div');div.className='loja';
+  const div=document.createElement('div');div.className='loja'+(ehVip(loja)?' vip':'');
   const telLoja=(loja.telefone||'').replace(/'/g,"");
   const foto=loja.foto_loja?`<img src="${loja.foto_loja}" class="loja-foto" style="cursor:pointer" onclick="chamarLoja('${telLoja}')">`:`<div class="loja-foto-vazia" style="cursor:pointer" onclick="chamarLoja('${telLoja}')">🏪</div>`;
   let ph='';
@@ -280,7 +351,7 @@ function montarLoja(loja,prods){
     ph+='</div>';
     ph+=`<button class="btn" style="background:#2d6a2d;margin-top:12px" onclick="fazerPedido(event,'${loja.nome.replace(/'/g,"")}','${loja.telefone||''}')">Pedir pelo WhatsApp</button>`;
   }
-  div.innerHTML=`${foto}<div class="loja-body"><h3>${loja.nome}</h3><span class="loja-cat">${loja.categoria||''}</span><div class="loja-end">📍 ${loja.endereco||((loja.cidade||'Luziânia')+'/GO')}</div>${ph}${btnZap}</div>`;
+  div.innerHTML=`${foto}<div class="loja-body"><h3>${nomeSemCoroa(loja.nome)}</h3>${ehVip(loja)?'<span class="selo-vip">👑 Destaque</span>':''}<span class="loja-cat">${loja.categoria||''}</span><div class="loja-end">📍 ${loja.endereco||((loja.cidade||'Luziânia')+(loja.estado?'/'+loja.estado:''))}</div>${ph}${btnZap}</div>`;
   return div;
 }
 function fazerPedido(ev,lojaNome,lojaTel){
@@ -301,6 +372,7 @@ async function carregarLojaList(){
   try{const {data:lojas,error}=await sb.from('lojistas').select('*').eq('ativo',true).order('categoria');if(error)throw error;
     if(!lojas||!lojas.length){area.innerHTML='<div class="vazio"><div class="em">🏪</div>Nenhuma loja cadastrada ainda.</div>';return;}
     area.innerHTML='';
+    ordenarLojas(lojas);
     for(const loja of lojas){const {data:prods}=await sb.from('produtos').select('*').eq('lojista_id',loja.id).order('nome');area.appendChild(montarLoja(loja,prods||[]));}
   }catch(e){area.innerHTML='<div class="vazio">Erro ao carregar.</div>';console.error(e);}
 }
@@ -364,6 +436,19 @@ function fotoValida(arq){
   return true;
 }
 
+let editId=null,editFoto=null;
+function editarLojista(l){
+  editId=l.id;editFoto=l.foto_loja||null;
+  loNome.value=l.nome||'';loCat.value=l.categoria||CATEGORIAS[0];loCidade.value=l.cidade||'';loUF.value=l.estado||'GO';loTel.value=l.telefone||'';loFoto.value='';
+  if(l.foto_loja){admFotoPrev.src=l.foto_loja;admFotoPrev.style.display='block';}else{admFotoPrev.style.display='none';}
+  addLojBtn.textContent='💾 Salvar alterações';cancelEdBtn.classList.remove('hidden');tituloCad.textContent='✏️ Editar loja';
+  tituloCad.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function cancelarEdicao(){
+  editId=null;editFoto=null;
+  loNome.value='';loTel.value='';loCidade.value='';loFoto.value='';admFotoPrev.style.display='none';
+  addLojBtn.textContent='Cadastrar loja';cancelEdBtn.classList.add('hidden');tituloCad.textContent='➕ Cadastrar loja';
+}
 async function addLojista(){
   const nome=loNome.value.trim(),cat=loCat.value,cidade=loCidade.value.trim()||'Luziânia',tel=loTel.value.trim().replace(/\D/g,''),email='';
   const arq=loFoto.files[0];
@@ -382,13 +467,22 @@ async function addLojista(){
         url=sb.storage.from('fotos').getPublicUrl(cam).data.publicUrl;
       }
     }catch(e){console.warn('Erro foto, tentando embutir:',e);try{url=await comprimirImg(arq,500);}catch(_){} }
-    if(!url)toast('⚠️ Não deu para anexar essa foto (tente um JPG ou PNG). A loja foi salva sem foto — você pode editar depois.',"#b45309");
-  }
+    if(!url&&editId){url=editFoto;toast('⚠️ Não deu para trocar a foto. A foto antiga foi mantida.',"#b45309");}
+    else if(!url)toast('⚠️ Não deu para anexar essa foto (tente um JPG ou PNG). A loja foi salva sem foto — você pode editar depois.',"#b45309");
+  }else if(editId){url=editFoto;}
   try{
-    const {error}=await sb.from('lojistas').insert({nome,categoria:cat,cidade,telefone:tel,email,senha:'-',foto_loja:url,ativo:true});
-    if(error)throw error;
-    loNome.value='';loTel.value='';loCidade.value='';loFoto.value='';admFotoPrev.style.display='none';
-    toast('✅ Loja cadastrada com sucesso!',"#1a7a1a");
+    if(editId){
+      const {data,error}=await sb.from('lojistas').update({nome,categoria:cat,cidade,estado:loUF.value,telefone:tel,foto_loja:url}).eq('id',editId).select('id');
+      if(error)throw error;
+      if(!data||!data.length)throw new Error('A loja não foi alterada (sem permissão). Saia e entre de novo.');
+      cancelarEdicao();
+      toast('✅ Loja atualizada!',"#1a7a1a");
+    }else{
+      const {error}=await sb.from('lojistas').insert({nome,categoria:cat,cidade,estado:loUF.value,telefone:tel,email,senha:'-',foto_loja:url,ativo:true});
+      if(error)throw error;
+      loNome.value='';loTel.value='';loCidade.value='';loFoto.value='';admFotoPrev.style.display='none';
+      toast('✅ Loja cadastrada com sucesso!',"#1a7a1a");
+    }
     carregarLojistas();
   }catch(e){
     console.error('Erro loja:',e);
@@ -397,7 +491,7 @@ async function addLojista(){
     if(!cx){cx=document.createElement('div');cx.id='erroAdm';cx.style.cssText='background:#fee2e2;border:2px solid #dc2626;color:#7f1d1d;padding:12px;border-radius:10px;margin-top:12px;font-size:13px;font-weight:600';addLojBtn.parentNode.appendChild(cx);}
     cx.innerHTML='❌ NÃO SALVOU:<br>'+msg;
   }
-  addLojBtn.textContent='Cadastrar loja';addLojBtn.disabled=false;
+  addLojBtn.textContent=editId?'💾 Salvar alterações':'Cadastrar loja';addLojBtn.disabled=false;
 }
 
 async function addProduto(){
@@ -431,7 +525,7 @@ async function carregarLojistas(){
     if(!data.length){listaLoj.innerHTML='<p style="font-size:13px;color:#8a7a9a">Nenhuma loja ainda.</p>';return;}
     listaLoj.innerHTML='';data.forEach(l=>{const div=document.createElement('div');div.className='loja-item';
       const f=l.foto_loja?`<img src="${l.foto_loja}">`:`<div style="width:48px;height:48px;border-radius:8px;background:#ede0f5;display:flex;align-items:center;justify-content:center;font-size:22px">🏪</div>`;
-      div.innerHTML=`${f}<div class="li"><div class="ln">${l.nome}</div><div class="le">${l.categoria||''} · ${l.cidade||'Luziânia'} · ${l.telefone||''}</div></div><button class="del">Excluir</button>`;div.querySelector('.del').onclick=()=>delLojista(l.id,l.nome);listaLoj.appendChild(div);});
+      div.innerHTML=`${f}<div class="li"><div class="ln">${l.nome}</div><div class="le">${l.categoria||''} · ${l.cidade||'Luziânia'}${l.estado?'/'+l.estado:''} · ${l.telefone||''}</div></div><div class="acoes"><button class="ed">Editar</button><button class="del">Excluir</button></div>`;div.querySelector('.ed').onclick=()=>editarLojista(l);div.querySelector('.del').onclick=()=>delLojista(l.id,l.nome);listaLoj.appendChild(div);});
   }catch(e){listaLoj.innerHTML='<p>Erro.</p>';console.error(e);}
 }
 async function delLojista(id,nome){
