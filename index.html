@@ -341,12 +341,12 @@ function chamarLoja(tel){
 function montarLoja(loja,prods){
   const div=document.createElement('div');div.className='loja'+(ehVip(loja)?' vip':'');
   const telLoja=(loja.telefone||'').replace(/'/g,"");
-  const foto=loja.foto_loja?`<img src="${loja.foto_loja}" class="loja-foto" style="cursor:pointer" onclick="chamarLoja('${telLoja}')">`:`<div class="loja-foto-vazia" style="cursor:pointer" onclick="chamarLoja('${telLoja}')">🏪</div>`;
+  const foto=loja.foto_loja?`<img src="${loja.foto_loja}" loading="lazy" decoding="async" class="loja-foto" style="cursor:pointer" onclick="chamarLoja('${telLoja}')">`:`<div class="loja-foto-vazia" style="cursor:pointer" onclick="chamarLoja('${telLoja}')">🏪</div>`;
   let ph='';
   const btnZap=`<button class="btn" style="background:#25D366;margin-top:12px" onclick="chamarLoja('${telLoja}')">💬 Chamar no WhatsApp</button>`;
   if(!prods.length){ph='';}
   else{ph='<div class="produtos">';
-    prods.slice(0,5).forEach(p=>{const pf=p.foto?`<img src="${p.foto}">`:`<div style="width:48px;height:48px;border-radius:8px;background:#dcfce7;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">🛍️</div>`;
+    prods.slice(0,5).forEach(p=>{const pf=p.foto?`<img src="${p.foto}" loading="lazy">`:`<div style="width:48px;height:48px;border-radius:8px;background:#dcfce7;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">🛍️</div>`;
       ph+=`<div class="prod">${pf}<div class="pinfo"><div class="pnome">${p.nome}</div><div class="ppreco">R$ ${Number(p.preco).toFixed(2).replace('.',',')}</div></div><div class="prod-check" data-nome="${p.nome}" data-preco="${p.preco}" onclick="this.classList.toggle('on');this.textContent=this.classList.contains('on')?'✓':''"></div></div>`;});
     ph+='</div>';
     ph+=`<button class="btn" style="background:#2d6a2d;margin-top:12px" onclick="fazerPedido(event,'${loja.nome.replace(/'/g,"")}','${loja.telefone||''}')">Pedir pelo WhatsApp</button>`;
@@ -430,6 +430,33 @@ function comprimirImg(arq,maxW){
     r.readAsDataURL(arq);
   });
 }
+function comprimirBlob(arq,maxLado){
+  return new Promise((res)=>{
+    let pronto=false;
+    const fim=(v)=>{if(pronto)return;pronto=true;res(v);};
+    const seg=setTimeout(()=>fim(null),10000);
+    const url=URL.createObjectURL(arq);const img=new Image();
+    img.onload=()=>{
+      try{
+        const sc=Math.min(1,maxLado/Math.max(img.width,img.height));
+        const c=document.createElement('canvas');c.width=Math.round(img.width*sc);c.height=Math.round(img.height*sc);
+        const ctx=c.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,c.width,c.height);ctx.drawImage(img,0,0,c.width,c.height);
+        c.toBlob(b=>{clearTimeout(seg);URL.revokeObjectURL(url);fim(b);},'image/jpeg',0.78);
+      }catch(_){clearTimeout(seg);fim(null);}
+    };
+    img.onerror=()=>{clearTimeout(seg);URL.revokeObjectURL(url);fim(null);};
+    img.src=url;
+  });
+}
+async function enviarFoto(arq,caminho){
+  const leve=await comprimirBlob(arq,1000);
+  const corpo=leve||arq;
+  const ext=leve?'jpg':((arq.name.split('.').pop()||'jpg').toLowerCase());
+  const cam=`${caminho}.${ext}`;
+  const {error}=await sb.storage.from('fotos').upload(cam,corpo,{contentType:leve?'image/jpeg':(arq.type||undefined),cacheControl:'31536000'});
+  if(error)throw error;
+  return sb.storage.from('fotos').getPublicUrl(cam).data.publicUrl;
+}
 function fotoValida(arq){
   if(!arq)return true;
   if(arq.size>10*1024*1024){toast('⚠️ Foto muito grande (máx. 10MB). Vai ser salva sem foto.',"#b45309");return false;}
@@ -457,15 +484,7 @@ async function addLojista(){
   let url=null;
   if(arq&&fotoValida(arq)){
     try{
-      const ext=(arq.name.split('.').pop()||'jpg');
-      const cam=`loja_${Date.now()}.${ext}`;
-      const {error:up}=await sb.storage.from('fotos').upload(cam,arq);
-      if(up){
-        console.warn('Bucket bloqueou, usando foto embutida:',up);
-        url=await comprimirImg(arq,500);
-      }else{
-        url=sb.storage.from('fotos').getPublicUrl(cam).data.publicUrl;
-      }
+      url=await enviarFoto(arq,`loja_${Date.now()}`);
     }catch(e){console.warn('Erro foto, tentando embutir:',e);try{url=await comprimirImg(arq,500);}catch(_){} }
     if(!url&&editId){url=editFoto;toast('⚠️ Não deu para trocar a foto. A foto antiga foi mantida.',"#b45309");}
     else if(!url)toast('⚠️ Não deu para anexar essa foto (tente um JPG ou PNG). A loja foi salva sem foto — você pode editar depois.',"#b45309");
@@ -504,10 +523,7 @@ async function addProduto(){
   let url=null;
   if(arq&&fotoValida(arq)){
     try{
-      const ext=(arq.name.split('.').pop()||'jpg');const cam=`${lojaId}/${Date.now()}.${ext}`;
-      const {error:up}=await sb.storage.from('fotos').upload(cam,arq);
-      if(up){console.warn('Bucket bloqueou, embutindo:',up);url=await comprimirImg(arq,400);}
-      else{url=sb.storage.from('fotos').getPublicUrl(cam).data.publicUrl;}
+      url=await enviarFoto(arq,`${lojaId}/${Date.now()}`);
     }catch(e){console.warn(e);try{url=await comprimirImg(arq,400);}catch(_){} }
     if(!url)toast('⚠️ Não deu para anexar essa foto (tente um JPG ou PNG). O produto foi salvo sem foto.',"#b45309");
   }
@@ -524,7 +540,7 @@ async function carregarLojistas(){
     prLoja.innerHTML=data.map(l=>`<option value="${l.id}">${l.nome} (${l.categoria||''})</option>`).join('');
     if(!data.length){listaLoj.innerHTML='<p style="font-size:13px;color:#8a7a9a">Nenhuma loja ainda.</p>';return;}
     listaLoj.innerHTML='';data.forEach(l=>{const div=document.createElement('div');div.className='loja-item';
-      const f=l.foto_loja?`<img src="${l.foto_loja}">`:`<div style="width:48px;height:48px;border-radius:8px;background:#ede0f5;display:flex;align-items:center;justify-content:center;font-size:22px">🏪</div>`;
+      const f=l.foto_loja?`<img src="${l.foto_loja}" loading="lazy">`:`<div style="width:48px;height:48px;border-radius:8px;background:#ede0f5;display:flex;align-items:center;justify-content:center;font-size:22px">🏪</div>`;
       div.innerHTML=`${f}<div class="li"><div class="ln">${l.nome}</div><div class="le">${l.categoria||''} · ${l.cidade||'Luziânia'}${l.estado?'/'+l.estado:''} · ${l.telefone||''}</div></div><div class="acoes"><button class="ed">Editar</button><button class="del">Excluir</button></div>`;div.querySelector('.ed').onclick=()=>editarLojista(l);div.querySelector('.del').onclick=()=>delLojista(l.id,l.nome);listaLoj.appendChild(div);});
   }catch(e){listaLoj.innerHTML='<p>Erro.</p>';console.error(e);}
 }
